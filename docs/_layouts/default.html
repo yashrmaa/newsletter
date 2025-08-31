@@ -359,8 +359,11 @@
     </header>
 
     <nav class="nav-links">
-        <a href="{{ site.baseurl }}/" class="nav-link {% if page.url == '/' or page.url == '/index.html' %}active{% endif %}">📰 Today's Newsletter</a>
+        {% if site.baseurl == "" or site.baseurl == nil %}
+        <a href="./archive.html" class="nav-link {% if page.url == '/archive.html' %}active{% endif %}">📚 Archive</a>
+        {% else %}
         <a href="{{ site.baseurl }}/archive.html" class="nav-link {% if page.url == '/archive.html' %}active{% endif %}">📚 Archive</a>
+        {% endif %}
     </nav>
 
     <div class="container">
@@ -373,7 +376,11 @@
         <p>
             🤖 Built with TypeScript • Automated with GitHub Actions • Curated by AI
             <br>
-            <a href="{{ site.baseurl }}/index.html">Archive</a> •
+            {% if site.baseurl == "" or site.baseurl == nil %}
+            <a href="./archive.html">Archive</a> •
+            {% else %}
+            <a href="{{ site.baseurl }}/archive.html">Archive</a> •
+            {% endif %}
             <a href="https://github.com/yashvardhan90/newsletter">Source</a> •
             Generated {{ "now" | date: "%Y-%m-%d" }}
         </p>

@@ -228,11 +228,26 @@ permalink: /index.html
 ${markdown}`;
     await fs.writeFile(path.join(docsDir, 'index.md'), indexMarkdown, 'utf8');
     
-    // Also save with timestamp for archive
+    // Also save with timestamp for archive with Jekyll front matter
     const date = new Date();
     const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const displayDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long', 
+      day: 'numeric'
+    });
+    
+    const timestampedMarkdown = `---
+layout: default
+title: "Daily Brief - ${displayDate}"
+date: ${timestamp}
+permalink: /${timestamp}.html
+---
+
+${markdown}`;
+    
     const timestampedPath = path.join(docsDir, `${timestamp}.md`);
-    await fs.writeFile(timestampedPath, markdown, 'utf8');
+    await fs.writeFile(timestampedPath, timestampedMarkdown, 'utf8');
     
     // Generate updated archive index (as Markdown)
     logger.info('📚 Generating archive index...');
@@ -284,7 +299,8 @@ ${newsletterFiles.length > 0 ? newsletterFiles.map(file => {
   });
   const isToday = date === today.toISOString().split('T')[0];
   
-  return `### ${isToday ? '🌟 ' : ''}[${displayDate}](./${file}) ${isToday ? '← Today' : ''}
+  const htmlFile = file.replace('.md', '.html');
+  return `### ${isToday ? '🌟 ' : ''}[${displayDate}](./${htmlFile}) ${isToday ? '← Today' : ''}
 
 - **File**: \`${file}\`
 - **Date**: ${displayDate}${isToday ? ' (Current)' : ''}
