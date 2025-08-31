@@ -3,6 +3,7 @@ import { createProviderFromEnv } from '../ai-providers/provider-factory.js';
 import { AIProvider, UserPreferences } from '../ai-providers/ai-provider.js';
 import { HTMLFormatter, CuratedArticle } from '../formatters/html-formatter.js';
 import { GitHubPublisher, PublishOptions } from '../publishers/github-publisher.js';
+import { ArchiveGenerator } from '../utils/archive-generator.js';
 import { logger } from './logger.js';
 import { newsletterConfig } from './config.js';
 import { Article } from '../utils/types.js';
@@ -12,12 +13,14 @@ export class NewsletterScheduler {
   private aiProvider: AIProvider;
   private htmlFormatter: HTMLFormatter;
   private githubPublisher: GitHubPublisher;
+  private archiveGenerator: ArchiveGenerator;
 
   constructor() {
     this.contentAggregator = new ContentAggregator();
     this.aiProvider = createProviderFromEnv();
     this.htmlFormatter = new HTMLFormatter();
     this.githubPublisher = new GitHubPublisher(newsletterConfig.github.token || '');
+    this.archiveGenerator = new ArchiveGenerator();
   }
 
   async generateDailyNewsletter(): Promise<void> {
@@ -217,6 +220,10 @@ export class NewsletterScheduler {
     const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
     const timestampedPath = path.join(outputDir, `newsletter-${timestamp}.html`);
     await fs.writeFile(timestampedPath, html, 'utf8');
+    
+    // Generate updated archive index
+    logger.info('📚 Generating archive index...');
+    this.archiveGenerator.generateArchiveIndex();
   }
 
   private logGenerationInsights(articles: CuratedArticle[]): void {
