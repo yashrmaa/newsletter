@@ -67,30 +67,30 @@ jobs:
         npm run generate
         echo "✅ Newsletter generation completed"
         echo "📁 Files generated:"
-        ls -la output/
+        ls -la docs/
         echo "📄 Newsletter preview (README.md):"
-        head -20 output/README.md
+        head -20 docs/README.md
         echo ""
         echo "📚 Archive index preview (index.md):"
-        head -10 output/index.md
+        head -10 docs/index.md
 
     - name: 📤 Setup Pages
       uses: actions/configure-pages@v4
 
-    - name: 📁 Verify output directory
+    - name: 📁 Verify docs directory
       run: |
-        echo "🔍 Verifying output directory before upload:"
+        echo "🔍 Verifying docs directory before upload:"
         pwd
         ls -la
-        echo "📂 Output directory contents:"
-        ls -la output/
+        echo "📂 Docs directory contents:"
+        ls -la docs/
         echo "📏 File sizes:"
-        du -h output/*
+        du -h docs/*
     
     - name: 📁 Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './output'
+        path: './docs'
 
     - name: 🚀 Deploy to GitHub Pages
       id: deployment

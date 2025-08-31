@@ -111,7 +111,7 @@ Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, 
 - **📚 Articles**: 9 curated articles
 - **📡 Sources**: 5 expert sources
 - **🤖 Curation**: AI-powered with quality scoring
-- **⏰ Generated**: 2:18 PM on Aug 31, 2025
+- **⏰ Generated**: 2:27 PM on Aug 31, 2025
 
 ---
 
@@ -130,7 +130,7 @@ We monitor 28+ high-quality sources including:
 
 ---
 
-*Curated by Yash with AI • Generated at 2:18 PM on Aug 31, 2025*
+*Curated by Yash with AI • Generated at 2:27 PM on Aug 31, 2025*
 
 **🤖 Built with**: TypeScript • GitHub Actions • AI Curation  
 **📅 Schedule**: Daily at 7 AM Pacific  
