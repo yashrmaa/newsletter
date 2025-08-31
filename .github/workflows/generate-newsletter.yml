@@ -16,9 +16,7 @@ on:
       - 'src/**'
       - 'config/**'
       - 'templates/**'
-      - 'docs/_config.yml'
-      - 'docs/_layouts/**'
-      - 'docs/Gemfile'
+      - 'docs/**'
       - '.github/workflows/**'
 
 permissions:
