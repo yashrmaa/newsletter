@@ -21,6 +21,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 # Allow only one concurrent deployment
 concurrency:
@@ -67,10 +68,22 @@ jobs:
         echo "✅ Newsletter generation completed"
         echo "📁 Files generated:"
         ls -la output/
+        echo "📄 Index.html preview:"
+        head -20 output/index.html
 
     - name: 📤 Setup Pages
       uses: actions/configure-pages@v4
 
+    - name: 📁 Verify output directory
+      run: |
+        echo "🔍 Verifying output directory before upload:"
+        pwd
+        ls -la
+        echo "📂 Output directory contents:"
+        ls -la output/
+        echo "📏 File sizes:"
+        du -h output/*
+    
     - name: 📁 Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:

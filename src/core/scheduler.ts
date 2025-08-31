@@ -2,6 +2,7 @@ import { ContentAggregator } from '../aggregators/content-aggregator.js';
 import { createProviderFromEnv } from '../ai-providers/provider-factory.js';
 import { AIProvider, UserPreferences } from '../ai-providers/ai-provider.js';
 import { HTMLFormatter, CuratedArticle } from '../formatters/html-formatter.js';
+import { MarkdownFormatter } from '../formatters/markdown-formatter.js';
 import { GitHubPublisher, PublishOptions } from '../publishers/github-publisher.js';
 import { ArchiveGenerator } from '../utils/archive-generator.js';
 import { logger } from './logger.js';
@@ -12,6 +13,7 @@ export class NewsletterScheduler {
   private contentAggregator: ContentAggregator;
   private aiProvider: AIProvider;
   private htmlFormatter: HTMLFormatter;
+  private markdownFormatter: MarkdownFormatter;
   private githubPublisher: GitHubPublisher;
   private archiveGenerator: ArchiveGenerator;
 
@@ -19,6 +21,7 @@ export class NewsletterScheduler {
     this.contentAggregator = new ContentAggregator();
     this.aiProvider = createProviderFromEnv();
     this.htmlFormatter = new HTMLFormatter();
+    this.markdownFormatter = new MarkdownFormatter();
     this.githubPublisher = new GitHubPublisher(newsletterConfig.github.token || '');
     this.archiveGenerator = new ArchiveGenerator();
   }
@@ -98,10 +101,10 @@ export class NewsletterScheduler {
         logger.info(`💰 Estimated cost: $${usageStats.estimatedCost.toFixed(4)}`);
       }
 
-      // Step 3: Format as beautiful HTML newsletter
-      logger.info('🎨 Formatting newsletter HTML...');
-      const newsletterHTML = this.htmlFormatter.formatNewsletter(curatedArticles);
-      logger.info('✅ Newsletter HTML generated');
+      // Step 3: Format as beautiful Markdown newsletter
+      logger.info('🎨 Formatting newsletter Markdown...');
+      const newsletterMarkdown = this.markdownFormatter.formatNewsletter(curatedArticles);
+      logger.info('✅ Newsletter Markdown generated');
 
       // Step 4: Publish to GitHub Pages (or save locally)
       let publicURL = 'Not published (local mode)';
@@ -131,9 +134,9 @@ export class NewsletterScheduler {
       } else {
         // Save locally instead
         logger.info('💾 Saving newsletter locally (GitHub credentials not configured)...');
-        await this.saveNewsletterLocally(newsletterHTML);
+        await this.saveNewsletterLocally(newsletterMarkdown);
         logger.info('✅ Newsletter saved locally!');
-        logger.info('📄 Location: ./output/newsletter.html');
+        logger.info('📄 Location: ./output/README.md');
       }
 
       // Step 5: Send notification (if configured)
@@ -199,7 +202,7 @@ export class NewsletterScheduler {
     logger.info(`📱 Notification would include: ${privateURL}`);
   }
 
-  private async saveNewsletterLocally(html: string): Promise<void> {
+  private async saveNewsletterLocally(markdown: string): Promise<void> {
     const fs = await import('fs/promises');
     const path = await import('path');
     
@@ -211,19 +214,109 @@ export class NewsletterScheduler {
       // Directory might already exist
     }
     
-    // Save newsletter HTML
-    const filePath = path.join(outputDir, 'newsletter.html');
-    await fs.writeFile(filePath, html, 'utf8');
+    // Save newsletter as README.md (main page for GitHub)
+    const filePath = path.join(outputDir, 'README.md');
+    await fs.writeFile(filePath, markdown, 'utf8');
     
-    // Also save with timestamp
+    // Also save with timestamp for archive
     const date = new Date();
     const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
-    const timestampedPath = path.join(outputDir, `newsletter-${timestamp}.html`);
-    await fs.writeFile(timestampedPath, html, 'utf8');
+    const timestampedPath = path.join(outputDir, `${timestamp}.md`);
+    await fs.writeFile(timestampedPath, markdown, 'utf8');
     
-    // Generate updated archive index
+    // Generate updated archive index (as Markdown)
     logger.info('📚 Generating archive index...');
-    this.archiveGenerator.generateArchiveIndex();
+    await this.generateMarkdownArchive();
+  }
+
+  private async generateMarkdownArchive(): Promise<void> {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    
+    try {
+      // Scan for newsletter files
+      const outputDir = './output';
+      const files = await fs.readdir(outputDir);
+      
+      // Filter for dated markdown files (YYYY-MM-DD.md)
+      const newsletterFiles = files.filter(file => 
+        file.match(/^\d{4}-\d{2}-\d{2}\.md$/)
+      ).sort().reverse(); // Newest first
+      
+      // Generate archive index
+      const today = new Date();
+      const archiveMarkdown = `# 📰 Yash's Daily Brief - Newsletter Archive
+
+> Daily AI newsletter curated from expert tech blogs and research
+
+**Archive of all newsletters • Generated on ${today.toLocaleDateString('en-US', {
+  weekday: 'long',
+  year: 'numeric', 
+  month: 'long',
+  day: 'numeric'
+})}**
+
+---
+
+## 📅 Recent Newsletters
+
+${newsletterFiles.length > 0 ? newsletterFiles.map(file => {
+  const date = file.replace('.md', '');
+  const displayDate = new Date(date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long', 
+    day: 'numeric'
+  });
+  const isToday = date === today.toISOString().split('T')[0];
+  
+  return `### ${isToday ? '🌟 ' : ''}[${displayDate}](./${file}) ${isToday ? '← Today' : ''}
+
+- **File**: \`${file}\`
+- **Date**: ${displayDate}${isToday ? ' (Current)' : ''}
+`;
+}).join('\n') : '📝 No newsletters yet. Check back daily for new AI insights!'}
+
+---
+
+## 📊 Archive Stats
+
+- **📚 Total Newsletters**: ${newsletterFiles.length}
+- **🗓️ Archive Period**: ${newsletterFiles.length > 0 ? `${newsletterFiles[newsletterFiles.length - 1].replace('.md', '')} to ${newsletterFiles[0].replace('.md', '')}` : 'Starting soon'}
+- **📅 Schedule**: Daily at 7 AM Pacific
+- **🤖 Curation**: AI-powered content selection
+
+---
+
+## 🎯 About This Newsletter
+
+This newsletter is automatically generated daily, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.
+
+### 📚 Content Sources
+
+We monitor 28+ high-quality sources including:
+
+- **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison
+- **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI  
+- **🔧 Platforms**: Hugging Face, LangChain, Pinecone, Weights & Biases
+- **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog
+
+---
+
+*🤖 Built with TypeScript • Automated with GitHub Actions • Curated by AI*
+
+**📧 Questions?** This newsletter is automatically generated. For technical issues, check the [repository](https://github.com/yashvardhan90/newsletter).
+`;
+
+      // Save archive index
+      const indexPath = path.join(outputDir, 'index.md');
+      await fs.writeFile(indexPath, archiveMarkdown, 'utf8');
+      
+      logger.info(`✅ Archive index generated with ${newsletterFiles.length} newsletters`);
+      
+    } catch (error: any) {
+      logger.error('Error generating Markdown archive:', error.message);
+    }
   }
 
   private logGenerationInsights(articles: CuratedArticle[]): void {
