@@ -1,0 +1,79 @@
+# Jekyll Configuration for GitHub Pages
+title: "☕ Yash's Daily Brief"
+description: "Daily AI newsletter curated from expert tech blogs and research"
+url: "https://yashvardhan90.github.io"
+baseurl: "/newsletter"
+
+# Build settings
+theme: null  # We're using custom layouts
+markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Exclude files from processing
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - src/
+  - templates/
+  - config/
+  - data/
+  - scripts/
+  - "*.ts"
+  - "*.js"
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+
+# Include specific files
+include:
+  - README.md
+  - index.md
+  - index.html
+  - "*.md"
+
+# Collections (if needed for archives)
+collections:
+  newsletters:
+    output: true
+    permalink: /:year/:month/:day/
+
+# Default layout
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: "README.md"
+    values:
+      layout: "default"
+      permalink: /README.html
+  - scope:
+      path: "index.md"
+    values:
+      layout: "default"
+      permalink: /index.html
+
+# Navigation
+header_pages:
+  - index.md
+  - README.md
+
+# Footer
+footer_links:
+  - title: "GitHub"
+    url: "https://github.com/yashvardhan90/newsletter"
+  - title: "Archive"
+    url: "/index.html"

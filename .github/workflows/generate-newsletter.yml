@@ -74,23 +74,41 @@ jobs:
         echo "📚 Archive index preview (index.md):"
         head -10 docs/index.md
 
+    - name: 💎 Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+        bundler-cache: false
+
+    - name: 🏗️ Build Jekyll site
+      run: |
+        cd docs
+        gem install bundler
+        bundle config set --local path 'vendor/bundle'
+        bundle install
+        bundle exec jekyll build --baseurl /newsletter
+        echo "📁 Built site contents:"
+        ls -la _site/
+      env:
+        JEKYLL_ENV: production
+
     - name: 📤 Setup Pages
       uses: actions/configure-pages@v4
 
-    - name: 📁 Verify docs directory
+    - name: 📁 Verify built site
       run: |
-        echo "🔍 Verifying docs directory before upload:"
+        echo "🔍 Verifying _site directory before upload:"
         pwd
         ls -la
-        echo "📂 Docs directory contents:"
-        ls -la docs/
+        echo "📂 Built site contents:"
+        ls -la docs/_site/
         echo "📏 File sizes:"
-        du -h docs/*
+        du -h docs/_site/*
     
     - name: 📁 Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './docs'
+        path: './docs/_site'
 
     - name: 🚀 Deploy to GitHub Pages
       id: deployment

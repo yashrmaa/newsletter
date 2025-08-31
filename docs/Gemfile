@@ -1,0 +1,15 @@
+source "https://rubygems.org"
+
+# Simplified Jekyll setup for GitHub Pages
+gem "jekyll", "~> 3.9"
+gem "kramdown-parser-gfm"
+
+# Basic plugins
+group :jekyll_plugins do
+  gem "jekyll-feed"
+  gem "jekyll-seo-tag"
+  gem "jekyll-sitemap"
+end
+
+# For local testing
+gem "webrick", "~> 1.8"
