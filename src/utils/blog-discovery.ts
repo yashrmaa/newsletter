@@ -162,7 +162,7 @@ export class BlogDiscovery {
               url: rssUrl,
               category: this.categorizeBlog(blogUrl),
               priority: this.assignPriority(blogUrl),
-              description: `RSS feed for ${blogName}`,
+              // description: `RSS feed for ${blogName}`,
               type: 'rss',
               enabled: true,
               errorCount: 0

@@ -103,7 +103,7 @@ export class NewsletterScheduler {
 
       // Step 3: Format as beautiful Markdown newsletter
       logger.info('🎨 Formatting newsletter Markdown...');
-      const newsletterMarkdown = this.markdownFormatter.formatNewsletter(curatedArticles);
+      const newsletterMarkdown = this.markdownFormatter.formatNewsletter(curatedArticles as any);
       logger.info('✅ Newsletter Markdown generated');
 
       // Step 4: Publish to GitHub Pages (or save locally)
@@ -120,7 +120,7 @@ export class NewsletterScheduler {
         };
 
         const result = await this.githubPublisher.publishNewsletter(
-          newsletterHTML,
+          newsletterMarkdown,
           new Date(),
           publishOptions
         );
@@ -217,6 +217,16 @@ export class NewsletterScheduler {
     // Save newsletter as README.md (main page for GitHub)
     const filePath = path.join(docsDir, 'README.md');
     await fs.writeFile(filePath, markdown, 'utf8');
+    
+    // Also save as index.md with Jekyll front matter for proper rendering
+    const indexMarkdown = `---
+layout: default
+title: Today's Newsletter
+permalink: /index.html
+---
+
+${markdown}`;
+    await fs.writeFile(path.join(docsDir, 'index.md'), indexMarkdown, 'utf8');
     
     // Also save with timestamp for archive
     const date = new Date();
