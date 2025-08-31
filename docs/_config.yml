@@ -38,8 +38,6 @@ exclude:
 # Include specific files
 include:
   - README.md
-  - index.md
-  - index.html
   - "*.md"
 
 # Collections (if needed for archives)
