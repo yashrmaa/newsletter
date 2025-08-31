@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Today's Newsletter
-permalink: /index.html
+permalink: /test-jekyll-works.html
 ---
 
 # ☕ Yash's Daily Brief
