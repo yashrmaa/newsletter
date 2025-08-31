@@ -17,7 +17,7 @@ export class NewsletterScheduler {
     this.contentAggregator = new ContentAggregator();
     this.aiProvider = createProviderFromEnv();
     this.htmlFormatter = new HTMLFormatter();
-    this.githubPublisher = new GitHubPublisher(newsletterConfig.github.token);
+    this.githubPublisher = new GitHubPublisher(newsletterConfig.github.token || '');
   }
 
   async generateDailyNewsletter(): Promise<void> {
@@ -100,32 +100,54 @@ export class NewsletterScheduler {
       const newsletterHTML = this.htmlFormatter.formatNewsletter(curatedArticles);
       logger.info('✅ Newsletter HTML generated');
 
-      // Step 4: Publish to GitHub Pages
-      logger.info('🌐 Publishing to GitHub Pages...');
-      const publishOptions: PublishOptions = {
-        owner: newsletterConfig.github.username,
-        repo: this.extractRepoName(newsletterConfig.github.repo),
-        branch: newsletterConfig.github.branch,
-        directory: 'newsletter' // Optional: organize in subdirectory
-      };
+      // Step 4: Publish to GitHub Pages (or save locally)
+      let publicURL = 'Not published (local mode)';
+      let privateURL = 'Not published (local mode)';
 
-      const { publicURL, privateURL } = await this.githubPublisher.publishNewsletter(
-        newsletterHTML,
-        new Date(),
-        publishOptions
-      );
+      if (newsletterConfig.github.token && newsletterConfig.github.repo) {
+        logger.info('🌐 Publishing to GitHub Pages...');
+        const publishOptions: PublishOptions = {
+          owner: newsletterConfig.github.username || '',
+          repo: this.extractRepoName(newsletterConfig.github.repo || ''),
+          branch: newsletterConfig.github.branch,
+          directory: 'newsletter' // Optional: organize in subdirectory
+        };
 
-      logger.info(`✅ Newsletter published successfully!`);
-      logger.info(`📄 Public URL: ${publicURL}`);
-      logger.info(`🔐 Private URL: ${privateURL}`);
+        const result = await this.githubPublisher.publishNewsletter(
+          newsletterHTML,
+          new Date(),
+          publishOptions
+        );
+        
+        publicURL = result.publicURL;
+        privateURL = result.privateURL;
+
+        logger.info(`✅ Newsletter published successfully!`);
+        logger.info(`📄 Public URL: ${publicURL}`);
+        logger.info(`🔐 Private URL: ${privateURL}`);
+      } else {
+        // Save locally instead
+        logger.info('💾 Saving newsletter locally (GitHub credentials not configured)...');
+        await this.saveNewsletterLocally(newsletterHTML);
+        logger.info('✅ Newsletter saved locally!');
+        logger.info('📄 Location: ./output/newsletter.html');
+      }
 
       // Step 5: Send notification (if configured)
       if (process.env.USER_EMAIL) {
         await this.sendNotification(publicURL, privateURL, curatedArticles);
       }
 
-      // Step 6: Update archive (optional)
-      await this.githubPublisher.createArchiveIndex(publishOptions);
+      // Step 6: Update archive (optional, only if GitHub is configured)
+      if (newsletterConfig.github.token && newsletterConfig.github.repo) {
+        const publishOptions: PublishOptions = {
+          owner: newsletterConfig.github.username || '',
+          repo: this.extractRepoName(newsletterConfig.github.repo || ''),
+          branch: newsletterConfig.github.branch,
+          directory: 'newsletter'
+        };
+        await this.githubPublisher.createArchiveIndex(publishOptions);
+      }
 
       const endTime = Date.now();
       const duration = Math.round((endTime - startTime) / 1000);
@@ -174,6 +196,29 @@ export class NewsletterScheduler {
     logger.info(`📱 Notification would include: ${privateURL}`);
   }
 
+  private async saveNewsletterLocally(html: string): Promise<void> {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    
+    // Create output directory
+    const outputDir = './output';
+    try {
+      await fs.mkdir(outputDir, { recursive: true });
+    } catch (error) {
+      // Directory might already exist
+    }
+    
+    // Save newsletter HTML
+    const filePath = path.join(outputDir, 'newsletter.html');
+    await fs.writeFile(filePath, html, 'utf8');
+    
+    // Also save with timestamp
+    const date = new Date();
+    const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const timestampedPath = path.join(outputDir, `newsletter-${timestamp}.html`);
+    await fs.writeFile(timestampedPath, html, 'utf8');
+  }
+
   private logGenerationInsights(articles: CuratedArticle[]): void {
     // Category distribution
     const categoryCount = articles.reduce((acc, article) => {
@@ -218,9 +263,13 @@ export class NewsletterScheduler {
       const isWithinBudget = this.aiProvider.isWithinBudget();
       checks.aiProvider = isWithinBudget;
 
-      // Check GitHub API
+      // Check GitHub API (optional for local mode)
       if (newsletterConfig.github.token && newsletterConfig.github.repo) {
         checks.githubAPI = true;
+      } else {
+        // GitHub is optional for local mode, so mark as true
+        checks.githubAPI = true;
+        logger.info('📝 Running in local mode (GitHub publishing disabled)');
       }
 
       // Check content sources

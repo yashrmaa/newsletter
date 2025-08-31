@@ -1,77 +1,61 @@
-# 📰 Personal Newsletter Generator Agent
+# 🤖 AI Newsletter Generator
 
-> An autonomous AI agent that generates a personalized daily newsletter using Claude AI, automatically published to GitHub Pages.
+> An automated newsletter generator that curates high-quality AI/tech blog content from expert sources, with multi-tier AI curation and automated GitHub Pages deployment.
 
-## 🌟 Features
+## ✨ Features
 
-- **🤖 Claude-Powered Curation**: Intelligent content selection that learns your preferences
-- **📱 Mobile-First Design**: Beautiful reading experience optimized for phones and desktop
-- **☁️ Cloud-Native**: Runs reliably on GitHub Actions (zero server costs)
-- **🔒 Private Feedback System**: Improve curation without exposing preferences publicly
-- **⚡ Zero Maintenance**: Fully automated - generates and publishes daily at 7 AM
-- **📊 Smart Content Discovery**: Explores beyond RSS feeds using multiple sources
+- **🎯 Expert Curation**: Pulls content from 100+ AI/tech blogs listed in `ai_blogs.md`
+- **🤖 Multi-Tier AI**: Free rule-based → Budget OpenAI → Premium Claude curation
+- **📅 Automated Scheduling**: Daily generation via GitHub Actions
+- **🌐 GitHub Pages**: Automatic publishing with beautiful responsive design
+- **📱 Mobile-First**: Clean, readable design with dark/light mode support
+- **🔍 Smart Discovery**: Automatically discovers RSS feeds from blog URLs
 
-## 🚀 Quick Start (5 Minutes)
+## 🚀 Quick Start
 
-### 1. Create Repositories
-
-You need two repositories:
-
-1. **Code Repository**: Fork/clone this repo for the newsletter agent code
-2. **Pages Repository**: Create `username.github.io` or enable Pages on any repo
-
-### 2. Configure GitHub Secrets
-
-In your **code repository**, go to `Settings → Secrets → Actions` and add:
-
+### 1. Fork & Clone
 ```bash
-# Required secrets
-ANTHROPIC_API_KEY=sk-ant-xxxxx     # Get from console.anthropic.com
-GITHUB_TOKEN=ghp_xxxxx             # GitHub Personal Access Token
-GITHUB_PAGES_REPO=username/repo    # Where to publish (e.g., "john/john.github.io")
-NEWS_API_KEY=xxxxx                 # Get from newsapi.org (optional)
-FEEDBACK_SECRET=random_secure_key  # Any random string for private URLs
-
-# Optional: Email notifications (for later)
-USER_EMAIL=your-email@gmail.com
-GMAIL_USER=your-gmail@gmail.com
-GMAIL_APP_PASSWORD=app_password
-```
-
-### 3. Customize Your Preferences
-
-Edit `data/preferences/user-preferences.json`:
-
-```json
-{
-  "topics": {
-    "technology": { "interest_score": 0.9, "keywords": ["ai", "startups", "crypto"] },
-    "business": { "interest_score": 0.7, "keywords": ["markets", "economy"] }
-  }
-}
-```
-
-### 4. Test & Deploy
-
-```bash
-# Test locally (optional)
+git clone https://github.com/yourusername/newsletter.git
+cd newsletter
 npm install
-npm run build
+```
+
+### 2. Local Development
+```bash
+# Generate newsletter locally (free tier)
 npm run generate
 
-# Deploy to GitHub
-git add .
-git commit -m "Setup newsletter agent"
-git push origin main
-
-# Trigger first run: Go to GitHub Actions → "Generate Daily Newsletter" → Run workflow
+# View in browser
+open ./output/newsletter.html
 ```
 
-### 5. View Your Newsletter
+### 3. GitHub Pages Setup
 
-Your newsletter will be published at:
-- **Public**: `https://username.github.io/repo-name/newsletter/YYYY/MM/DD/`
-- **Private** (with feedback): Sent to your email or check GitHub Actions logs
+#### Enable GitHub Pages
+1. Go to your repository → Settings → Pages
+2. Source: "GitHub Actions"
+3. The workflow will automatically deploy to: `https://yourusername.github.io/newsletter`
+
+#### Configure Secrets (Optional - for AI curation)
+Go to Settings → Secrets and Variables → Actions:
+
+```bash
+# AI Provider (optional)
+LLM_PROVIDER=free        # 'free', 'openai', or 'claude'
+MONTHLY_BUDGET_LIMIT=0.00  # Budget limit
+
+# OpenAI (if using openai provider)
+OPENAI_API_KEY=your_key_here
+
+# Claude (if using claude provider)  
+CLAUDE_API_KEY=your_key_here
+```
+
+### 4. Automatic Scheduling
+The newsletter will automatically:
+- 📅 Generate daily at 8 AM UTC
+- 🚀 Deploy to GitHub Pages
+- 💾 Archive previous editions
 
 ## 🛠️ How It Works
 

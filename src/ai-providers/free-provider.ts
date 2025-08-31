@@ -106,7 +106,19 @@ export class FreeRuleBasedProvider implements AIProvider {
   }
 
   private calculateTopicRelevance(article: Article, preferences: UserPreferences): number {
-    const content = (article.title + ' ' + (article.excerpt || '') + ' ' + article.tags.join(' ')).toLowerCase();
+    // Safely handle tags array - filter out non-strings
+    let tags = '';
+    if (Array.isArray(article.tags)) {
+      const stringTags = article.tags.filter(tag => typeof tag === 'string');
+      tags = stringTags.join(' ');
+    }
+    
+    const content = (
+      (article.title || '') + ' ' + 
+      (article.excerpt || '') + ' ' + 
+      tags + ' ' +
+      (article.category || '')
+    ).toLowerCase();
     let maxRelevance = 0;
     let bestTopic = '';
 

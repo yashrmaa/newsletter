@@ -2,6 +2,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Article, ContentSource } from '../utils/types.js';
 import { RSSAggregator } from './rss-aggregator.js';
+import { ContentExtractor } from './content-extractor.js';
+import { BlogDiscovery } from '../utils/blog-discovery.js';
 import { logger } from '../core/logger.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -11,61 +13,89 @@ const __dirname = dirname(__filename);
 
 export class ContentAggregator {
   private rssAggregator: RSSAggregator;
+  private contentExtractor: ContentExtractor;
+  private blogDiscovery: BlogDiscovery;
   private sources: ContentSource[];
 
   constructor() {
     this.rssAggregator = new RSSAggregator();
-    this.sources = this.loadSources();
+    this.contentExtractor = new ContentExtractor();
+    this.blogDiscovery = new BlogDiscovery();
+    this.sources = [];
   }
 
-  private loadSources(): ContentSource[] {
+  /**
+   * Initialize sources from ai_blogs.md file
+   */
+  private async initializeSources(): Promise<void> {
+    if (this.sources.length === 0) {
+      logger.info('🔧 Discovering blog sources from ai_blogs.md...');
+      
+      try {
+        // First try to load from cache/fallback config
+        this.sources = this.loadFallbackSources();
+        
+        // Then discover new sources from ai_blogs.md (async)
+        const discoveredSources = await this.blogDiscovery.discoverBlogSources();
+        
+        if (discoveredSources.length > 0) {
+          this.sources = discoveredSources;
+          logger.info(`✅ Loaded ${this.sources.length} discovered blog sources`);
+        } else {
+          logger.warn('⚠️ Blog discovery failed, using fallback sources');
+        }
+        
+      } catch (error: any) {
+        logger.error('Error initializing sources:', error.message);
+        this.sources = this.loadFallbackSources();
+      }
+    }
+  }
+
+  /**
+   * Load fallback sources from JSON config as backup
+   */
+  private loadFallbackSources(): ContentSource[] {
     try {
-      const sourcesPath = join(__dirname, '../../config/sources/news-sources.json');
+      const sourcesPath = join(__dirname, '../../config/sources/ai-blog-sources.json');
       const sourcesData = JSON.parse(readFileSync(sourcesPath, 'utf-8'));
       
       const allSources: ContentSource[] = [];
       
-      // Load RSS sources
-      if (sourcesData.rss_sources) {
-        allSources.push(...sourcesData.rss_sources.map((source: any) => ({
-          ...source,
-          type: 'rss' as const,
-          enabled: true,
-          errorCount: 0,
-        })));
+      // Load all source categories
+      const categories = [
+        'ai_research_individuals',
+        'company_ai_blogs', 
+        'ai_publications',
+        'ai_tools_platforms',
+        'ai_commentary'
+      ];
+      
+      for (const category of categories) {
+        if (sourcesData[category]) {
+          allSources.push(...sourcesData[category].map((source: any) => ({
+            ...source,
+            type: 'rss' as const,
+            enabled: true,
+            errorCount: 0,
+          })));
+        }
       }
       
-      // Load tech sources
-      if (sourcesData.tech_sources) {
-        allSources.push(...sourcesData.tech_sources.map((source: any) => ({
-          ...source,
-          type: 'rss' as const,
-          enabled: true,
-          errorCount: 0,
-        })));
-      }
-      
-      // Load business sources
-      if (sourcesData.business_sources) {
-        allSources.push(...sourcesData.business_sources.map((source: any) => ({
-          ...source,
-          type: 'rss' as const,
-          enabled: true,
-          errorCount: 0,
-        })));
-      }
-      
-      logger.info(`Loaded ${allSources.length} content sources`);
+      logger.info(`📋 Loaded ${allSources.length} fallback AI blog sources`);
       return allSources;
       
     } catch (error) {
-      logger.error('Error loading sources:', error);
+      logger.error('Error loading fallback sources:', error);
       return [];
     }
   }
 
-  async aggregateContent(): Promise<Article[]> {
+  async aggregateContent(extractFullContent: boolean = false): Promise<Article[]> {
     logger.info('Starting content aggregation');
+    
+    // Initialize sources from ai_blogs.md
+    await this.initializeSources();
     
     const startTime = Date.now();
     const articles: Article[] = [];
@@ -74,12 +104,19 @@ export class ContentAggregator {
     const rssArticles = await this.rssAggregator.fetchFromSources(this.sources);
     articles.push(...rssArticles);
     
-    // Filter articles by recency (last 24 hours)
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const recentArticles = articles.filter(article => article.publishedAt >= oneDayAgo);
+    // Filter articles by recency (last 7 days for blog content)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const recentArticles = articles.filter(article => article.publishedAt >= sevenDaysAgo);
+    
+    // Extract full content if requested
+    let finalArticles = recentArticles;
+    if (extractFullContent && recentArticles.length > 0) {
+      logger.info('🔍 Extracting full content for articles...');
+      finalArticles = await this.contentExtractor.extractBatchContent(recentArticles, 3); // Limit to 3 concurrent requests
+    }
     
     // Sort by priority (source priority) and publication date
-    recentArticles.sort((a, b) => {
+    finalArticles.sort((a, b) => {
       const sourceA = this.sources.find(s => s.id === a.source.id);
       const sourceB = this.sources.find(s => s.id === b.source.id);
       
@@ -95,9 +132,16 @@ export class ContentAggregator {
     
     const endTime = Date.now();
     logger.info(`Content aggregation completed in ${endTime - startTime}ms`);
-    logger.info(`Found ${recentArticles.length} recent articles from ${this.getUniqueSourceCount(recentArticles)} sources`);
+    logger.info(`Found ${finalArticles.length} recent articles from ${this.getUniqueSourceCount(finalArticles)} sources`);
     
-    return recentArticles;
+    if (extractFullContent) {
+      const withFullContent = finalArticles.filter(article => 
+        article.content && article.content.length > 500
+      ).length;
+      logger.info(`📄 ${withFullContent}/${finalArticles.length} articles have full content extracted`);
+    }
+    
+    return finalArticles;
   }
 
   private getUniqueSourceCount(articles: Article[]): number {
@@ -106,6 +150,10 @@ export class ContentAggregator {
   }
 
   getSources(): ContentSource[] {
+    // Load fallback sources if no sources are initialized
+    if (this.sources.length === 0) {
+      this.sources = this.loadFallbackSources();
+    }
     return [...this.sources];
   }
 

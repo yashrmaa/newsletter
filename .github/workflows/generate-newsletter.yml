@@ -1,0 +1,185 @@
+name: Generate Daily AI Newsletter
+
+on:
+  # Run daily at 8 AM UTC (3 AM EST / 12 AM PST)
+  schedule:
+    - cron: '0 8 * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # Run on pushes to main (for testing)
+  push:
+    branches: [ main ]
+    paths:
+      - 'ai_blogs.md'
+      - 'src/**'
+      - 'config/**'
+      - 'templates/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  generate-newsletter:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: 📦 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: ⚡ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: 📋 Install dependencies
+      run: npm ci
+
+    - name: 🔧 Setup environment
+      env:
+        LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'free' }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        MONTHLY_BUDGET_LIMIT: ${{ secrets.MONTHLY_BUDGET_LIMIT || '0.00' }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_USERNAME: ${{ github.repository_owner }}
+        GITHUB_BRANCH: 'gh-pages'
+        NODE_ENV: production
+      run: |
+        echo "Environment configured for $LLM_PROVIDER provider"
+        echo "Repository: $GITHUB_REPO"
+        echo "Owner: $GITHUB_USERNAME"
+
+    - name: 🤖 Generate AI Newsletter
+      env:
+        LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'free' }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        MONTHLY_BUDGET_LIMIT: ${{ secrets.MONTHLY_BUDGET_LIMIT || '0.00' }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_USERNAME: ${{ github.repository_owner }}
+        GITHUB_BRANCH: 'gh-pages'
+        NODE_ENV: production
+      run: |
+        echo "🚀 Starting newsletter generation..."
+        npm run generate
+        echo "✅ Newsletter generation completed"
+
+    - name: 📤 Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: 📁 Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './output'
+
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: 📝 Log deployment
+      run: |
+        echo "🎉 Newsletter successfully deployed!"
+        echo "📄 URL: ${{ steps.deployment.outputs.page_url }}"
+        echo "📊 Generated at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+
+  # Backup job to save newsletter in repository
+  backup-newsletter:
+    needs: generate-newsletter
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📦 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: ⚡ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: 📋 Install dependencies
+      run: npm ci
+
+    - name: 🤖 Generate newsletter backup
+      env:
+        LLM_PROVIDER: ${{ secrets.LLM_PROVIDER || 'free' }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        MONTHLY_BUDGET_LIMIT: ${{ secrets.MONTHLY_BUDGET_LIMIT || '0.00' }}
+        NODE_ENV: production
+      run: npm run generate
+
+    - name: 📅 Archive newsletter
+      run: |
+        # Create archive directory
+        mkdir -p archive/$(date +%Y)/$(date +%m)
+        
+        # Copy newsletter with timestamp
+        TIMESTAMP=$(date -u +"%Y-%m-%d")
+        cp output/newsletter.html "archive/$(date +%Y)/$(date +%m)/newsletter-${TIMESTAMP}.html"
+        
+        # Update latest symlink
+        rm -f archive/latest.html
+        ln -sf "$(date +%Y)/$(date +%m)/newsletter-${TIMESTAMP}.html" archive/latest.html
+        
+        echo "📁 Newsletter archived to archive/$(date +%Y)/$(date +%m)/newsletter-${TIMESTAMP}.html"
+
+    - name: 💾 Commit and push archive
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        git add archive/
+        
+        if git diff --staged --quiet; then
+          echo "📝 No changes to commit"
+        else
+          git commit -m "📰 Archive newsletter for $(date -u +"%Y-%m-%d")
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          
+          git push
+          echo "✅ Newsletter archived and pushed to repository"
+        fi
+
+  # Health check job
+  health-check:
+    needs: [generate-newsletter, backup-newsletter] 
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📊 Health Check Summary
+      run: |
+        echo "🔍 Newsletter Generation Health Check"
+        echo "====================================="
+        echo "📰 Generation: ${{ needs.generate-newsletter.result }}"
+        echo "💾 Backup: ${{ needs.backup-newsletter.result }}"
+        echo "⏰ Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+        
+        if [[ "${{ needs.generate-newsletter.result }}" == "success" ]]; then
+          echo "✅ Newsletter generation successful"
+        else
+          echo "❌ Newsletter generation failed"
+          exit 1
+        fi

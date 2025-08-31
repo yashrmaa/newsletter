@@ -15,10 +15,10 @@ export interface NewsletterConfig {
     monthlyBudget: number;
   };
   github: {
-    token: string;
-    repo: string;
+    token?: string;
+    repo?: string;
     branch: string;
-    username: string;
+    username?: string;
   };
   newsApi: {
     key: string;
@@ -42,11 +42,8 @@ export interface NewsletterConfig {
 // Determine required environment variables based on AI provider
 const aiProvider = (process.env.LLM_PROVIDER || 'free') as 'free' | 'openai' | 'claude';
 
-const baseRequiredEnvVars = [
-  'GITHUB_TOKEN',
-  'GITHUB_REPO', 
-  'GITHUB_USERNAME',
-];
+// No required env vars for local mode - GitHub publishing is optional
+const baseRequiredEnvVars: string[] = [];
 
 // Add AI-specific requirements
 const requiredEnvVars = [...baseRequiredEnvVars];
@@ -74,10 +71,10 @@ export const newsletterConfig: NewsletterConfig = {
     monthlyBudget: parseFloat(process.env.MONTHLY_BUDGET_LIMIT || '0'),
   },
   github: {
-    token: process.env.GITHUB_TOKEN!,
-    repo: process.env.GITHUB_REPO!,
+    token: process.env.GITHUB_TOKEN,
+    repo: process.env.GITHUB_REPO,
     branch: process.env.GITHUB_BRANCH || 'main',
-    username: process.env.GITHUB_USERNAME!,
+    username: process.env.GITHUB_USERNAME,
   },
   newsApi: {
     key: process.env.NEWS_API_KEY || '',

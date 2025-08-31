@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Daily Brief - {{formattedDate}}</title>
+    <title>Yash's Daily Brief - {{formattedDate}}</title>
     
     <!-- Performance Optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <meta name="theme-color" content="#2563eb">
     
     <!-- SEO -->
-    <meta name="description" content="Your personalized daily newsletter curated by Claude AI">
+    <meta name="description" content="Yash's daily AI newsletter curated from expert tech blogs and research">
     <meta name="robots" content="index, follow">
     
     <!-- Critical CSS -->
@@ -213,7 +213,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>☕ Your Daily Brief</h1>
+                    <h1>☕ Yash's Daily Brief</h1>
                     <div class="date">{{formattedDate}}</div>
                 </div>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
@@ -235,6 +235,8 @@
                     </h3>
                     <div class="article-meta">
                         <span>{{source.name}}</span>
+                        <span>•</span>
+                        <span>{{formatDate publishedAt}}</span>
                         <span>•</span>
                         <span>{{timeAgo}}</span>
                         {{#if readTime}}
@@ -269,6 +271,8 @@
                     <div class="article-meta">
                         <span>{{source.name}}</span>
                         <span>•</span>
+                        <span>{{formatDate publishedAt}}</span>
+                        <span>•</span>
                         <span>{{timeAgo}}</span>
                         {{#if readTime}}
                         <span>•</span>
@@ -293,7 +297,7 @@
     <footer>
         <div class="container">
             <div class="footer-text">
-                Curated by Claude AI • {{totalArticles}} articles from {{totalSources}} sources<br>
+                Curated by Yash with AI • {{totalArticles}} articles from {{totalSources}} sources<br>
                 Generated at {{generationTime}}
             </div>
         </div>

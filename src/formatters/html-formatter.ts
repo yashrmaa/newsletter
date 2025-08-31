@@ -28,17 +28,41 @@ export class HTMLFormatter {
   private registerHelpers() {
     // Format date helper
     Handlebars.registerHelper('formatDate', (date: Date) => {
-      return format(date, 'EEEE, MMMM do, yyyy');
+      try {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          return format(parsedDate, 'EEEE, MMMM do, yyyy');
+        }
+      } catch (error) {
+        // Return fallback for invalid dates
+      }
+      return format(new Date(), 'EEEE, MMMM do, yyyy');
     });
 
     // Time ago helper
     Handlebars.registerHelper('timeAgo', (date: Date) => {
-      return formatDistanceToNow(date, { addSuffix: true });
+      try {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          return formatDistanceToNow(parsedDate, { addSuffix: true });
+        }
+      } catch (error) {
+        // Return fallback for invalid dates
+      }
+      return 'unknown time ago';
     });
 
     // Format generation time helper
     Handlebars.registerHelper('formatGenerationTime', (date: Date) => {
-      return format(date, 'h:mm a \'on\' MMM d, yyyy');
+      try {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          return format(parsedDate, 'h:mm a \'on\' MMM d, yyyy');
+        }
+      } catch (error) {
+        // Return fallback for invalid dates
+      }
+      return format(new Date(), 'h:mm a \'on\' MMM d, yyyy');
     });
 
     // Truncate text helper
@@ -83,9 +107,10 @@ export class HTMLFormatter {
       const html = this.template(newsletterData);
       logger.info('Newsletter HTML generated successfully');
       return html;
-    } catch (error) {
+    } catch (error: any) {
       logger.error('Error formatting newsletter:', error);
-      throw new Error('Failed to format newsletter HTML');
+      logger.error('Template data:', JSON.stringify(newsletterData, null, 2));
+      throw new Error(`Failed to format newsletter HTML: ${error.message}`);
     }
   }
 
@@ -111,17 +136,29 @@ export class HTMLFormatter {
   }
 
   private prepareArticleData(article: CuratedArticle) {
+    // Safely handle potentially invalid dates
+    let timeAgo = 'unknown time ago';
+    try {
+      const publishDate = new Date(article.publishedAt);
+      if (!isNaN(publishDate.getTime())) {
+        timeAgo = formatDistanceToNow(publishDate, { addSuffix: true });
+      }
+    } catch (error) {
+      logger.warn(`Invalid date for article ${article.id}: ${article.publishedAt}`);
+    }
+
     return {
       id: article.id,
       title: article.title,
       url: article.url,
       excerpt: this.truncateExcerpt(article.excerpt || ''),
       source: article.source,
-      timeAgo: formatDistanceToNow(article.publishedAt, { addSuffix: true }),
-      readTime: article.readTime,
-      claudeSummary: article.claudeSummary,
+      publishedAt: article.publishedAt, // Add the actual publication date
+      timeAgo: timeAgo,
+      readTime: article.readTime || 5, // Default read time
+      claudeSummary: (article as any).aiSummary || (article as any).claudeSummary || article.summary, // AI-generated summary
       selectionReason: article.selectionReason,
-      tags: article.tags,
+      tags: Array.isArray(article.tags) ? article.tags : [],
     };
   }
 
