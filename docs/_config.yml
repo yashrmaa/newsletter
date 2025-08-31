@@ -52,24 +52,13 @@ collections:
 defaults:
   - scope:
       path: ""
-      type: "pages"
     values:
       layout: "default"
-  - scope:
-      path: "README.md"
-    values:
-      layout: "default"
-      permalink: /README.html
-  - scope:
-      path: "index.md"
-    values:
-      layout: "default"
-      permalink: /index.html
 
 # Navigation
 header_pages:
   - index.md
-  - README.md
+  - archive.md
 
 # Footer
 footer_links:

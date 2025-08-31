@@ -16,6 +16,10 @@ on:
       - 'src/**'
       - 'config/**'
       - 'templates/**'
+      - 'docs/_config.yml'
+      - 'docs/_layouts/**'
+      - 'docs/Gemfile'
+      - '.github/workflows/**'
 
 permissions:
   contents: read
@@ -83,12 +87,30 @@ jobs:
     - name: 🏗️ Build Jekyll site
       run: |
         cd docs
+        echo "📁 Current directory contents:"
+        ls -la
+        echo ""
+        echo "📄 Checking Jekyll config:"
+        cat _config.yml | head -20
+        echo ""
+        echo "💎 Installing bundler..."
         gem install bundler
         bundle config set --local path 'vendor/bundle'
+        echo ""
+        echo "📦 Installing Jekyll dependencies..."
         bundle install
-        bundle exec jekyll build --baseurl /newsletter
+        echo ""
+        echo "🔨 Building Jekyll site..."
+        bundle exec jekyll build --baseurl /newsletter --trace
+        echo ""
         echo "📁 Built site contents:"
         ls -la _site/
+        echo ""
+        echo "📄 Checking if README.html was generated:"
+        ls -la _site/README.html || echo "❌ README.html not found!"
+        echo ""
+        echo "📄 Checking if index.html was generated:"
+        ls -la _site/index.html || echo "❌ index.html not found!"
       env:
         JEKYLL_ENV: production
 
@@ -101,9 +123,14 @@ jobs:
         pwd
         ls -la
         echo "📂 Built site contents:"
-        ls -la docs/_site/
+        ls -la docs/_site/ || (echo "❌ ERROR: _site directory not found!" && exit 1)
         echo "📏 File sizes:"
-        du -h docs/_site/*
+        du -h docs/_site/* || echo "Warning: Could not get file sizes"
+        echo ""
+        echo "🔍 Checking critical files:"
+        test -f docs/_site/README.html && echo "✅ README.html exists" || echo "❌ README.html missing"
+        test -f docs/_site/index.html && echo "✅ index.html exists" || echo "❌ index.html missing"
+        test -f docs/_site/2025-08-31.html && echo "✅ 2025-08-31.html exists" || echo "ℹ️ 2025-08-31.html not found (may be expected)"
     
     - name: 📁 Upload artifact
       uses: actions/upload-pages-artifact@v3
