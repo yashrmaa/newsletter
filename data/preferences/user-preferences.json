@@ -1,0 +1,73 @@
+{
+  "topics": {
+    "technology": {
+      "interest_score": 0.9,
+      "keywords": ["ai", "machine learning", "software", "programming", "startups", "venture capital"],
+      "subtopics": {
+        "artificial_intelligence": 1.0,
+        "web_development": 0.8,
+        "cybersecurity": 0.7,
+        "mobile_apps": 0.6
+      }
+    },
+    "business": {
+      "interest_score": 0.7,
+      "keywords": ["economy", "markets", "finance", "investing", "entrepreneurship"],
+      "subtopics": {
+        "startup_news": 0.9,
+        "market_analysis": 0.6,
+        "corporate_news": 0.5
+      }
+    },
+    "science": {
+      "interest_score": 0.6,
+      "keywords": ["research", "breakthrough", "discovery", "innovation", "climate"],
+      "subtopics": {
+        "climate_change": 0.8,
+        "space_exploration": 0.7,
+        "medical_research": 0.6
+      }
+    },
+    "politics": {
+      "interest_score": 0.4,
+      "keywords": ["policy", "government", "election", "legislation"],
+      "subtopics": {
+        "tech_policy": 0.8,
+        "international_relations": 0.5,
+        "domestic_policy": 0.3
+      }
+    }
+  },
+  "sources": {
+    "reuters": {
+      "credibility_score": 0.95,
+      "relevance_score": 0.8
+    },
+    "techcrunch": {
+      "credibility_score": 0.85,
+      "relevance_score": 0.9
+    },
+    "ars-technica": {
+      "credibility_score": 0.9,
+      "relevance_score": 0.85
+    }
+  },
+  "content_preferences": {
+    "article_length": {
+      "short": 0.3,
+      "medium": 0.6,
+      "long": 0.1
+    },
+    "content_types": {
+      "breaking_news": 0.4,
+      "deep_analysis": 0.5,
+      "opinion_pieces": 0.2,
+      "technical_content": 0.8
+    }
+  },
+  "reading_patterns": {
+    "preferred_categories_order": ["technology", "business", "science", "general"],
+    "max_articles_per_category": 5,
+    "diversity_vs_focus": 0.7
+  }
+}

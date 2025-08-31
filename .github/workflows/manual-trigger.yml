@@ -1,0 +1,111 @@
+name: Manual Newsletter Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      llm_provider:
+        description: 'AI Provider to use'
+        required: false
+        default: 'free'
+        type: choice
+        options:
+          - free
+          - openai
+          - claude
+      debug_mode:
+        description: 'Enable debug logging'
+        required: false
+        default: 'true'
+      max_articles:
+        description: 'Maximum number of articles to include'
+        required: false
+        default: '10'
+      test_sources:
+        description: 'Use only test sources (faster execution)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  manual-generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Build Project
+        run: npm run build
+      
+      - name: Setup Cache Directory
+        run: mkdir -p tmp/cache logs
+      
+      - name: Manual Newsletter Generation
+        env:
+          # AI Provider Configuration
+          LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'free' }}
+          MONTHLY_BUDGET_LIMIT: ${{ secrets.MONTHLY_BUDGET_LIMIT || '0.00' }}
+          
+          # AI Provider API Keys
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          
+          # Core Infrastructure
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ secrets.GITHUB_PAGES_REPO || github.repository }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+          GITHUB_BRANCH: main
+          
+          # Optional External APIs
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+          
+          # Newsletter Configuration
+          NEWSLETTER_TIME: "07:00"
+          TIMEZONE: "America/Los_Angeles"
+          MAX_ARTICLES: ${{ github.event.inputs.max_articles || '10' }}
+          
+          # Cloud Configuration
+          CACHE_DIR: "./tmp/cache"
+          LOG_LEVEL: ${{ github.event.inputs.debug_mode == 'true' && 'debug' || 'info' }}
+          DEBUG_MODE: ${{ github.event.inputs.debug_mode }}
+          
+          # Private URL Authentication
+          FEEDBACK_SECRET: ${{ secrets.FEEDBACK_SECRET }}
+          
+          # Test Configuration
+          TEST_MODE: 'true'
+          TEST_SOURCES: ${{ github.event.inputs.test_sources }}
+        run: node dist/index.js
+      
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manual-run-${{ github.run_number }}
+          path: |
+            logs/
+            tmp/cache/
+          retention-days: 3
+      
+      - name: Show Results
+        if: success()
+        run: |
+          echo "🎉 Manual newsletter generation completed!"
+          echo "📅 Generated at: $(date)"
+          echo "📊 Check the artifacts for detailed logs and cache data"
+          echo "🌐 Your newsletter should be available at your GitHub Pages URL"

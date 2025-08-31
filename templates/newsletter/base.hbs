@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Daily Brief - {{formattedDate}}</title>
+    
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- SEO -->
+    <meta name="description" content="Your personalized daily newsletter curated by Claude AI">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Critical CSS -->
+    <style>
+        :root {
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --color-primary: #1a1a1a;
+            --color-secondary: #666666;
+            --color-accent: #2563eb;
+            --color-background: #ffffff;
+            --color-surface: #f8fafc;
+            --color-border: #e2e8f0;
+            --reading-width: min(65ch, 90vw);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--color-primary);
+            background: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: var(--reading-width);
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 50;
+            padding: 1rem 0;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .date {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+        }
+        
+        .theme-toggle {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--color-surface);
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article {
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+        
+        .article-title a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .article-title a:hover {
+            color: var(--color-accent);
+        }
+        
+        .article-meta {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article-excerpt {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .claude-summary {
+            background: var(--color-surface);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.925rem;
+            border-left: 3px solid var(--color-accent);
+        }
+        
+        .claude-summary strong {
+            color: var(--color-accent);
+        }
+        
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+            line-height: 1.5;
+        }
+        
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-primary: #ffffff;
+                --color-secondary: #94a3b8;
+                --color-accent: #60a5fa;
+                --color-background: #0f172a;
+                --color-surface: #1e293b;
+                --color-border: #334155;
+            }
+            
+            header {
+                background: rgba(15, 23, 42, 0.8);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .article-title {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>☕ Your Daily Brief</h1>
+                    <div class="date">{{formattedDate}}</div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {{#if highlights.length}}
+            <section class="section">
+                <h2 class="section-title">🔥 Today's Highlights</h2>
+                {{#each highlights}}
+                <article class="article">
+                    <h3 class="article-title">
+                        <a href="{{url}}" target="_blank" rel="noopener">{{title}}</a>
+                    </h3>
+                    <div class="article-meta">
+                        <span>{{source.name}}</span>
+                        <span>•</span>
+                        <span>{{timeAgo}}</span>
+                        {{#if readTime}}
+                        <span>•</span>
+                        <span>{{readTime}} min read</span>
+                        {{/if}}
+                    </div>
+                    {{#if excerpt}}
+                    <div class="article-excerpt">{{excerpt}}</div>
+                    {{/if}}
+                    {{#if claudeSummary}}
+                    <div class="claude-summary">
+                        <strong>Why this matters:</strong> {{claudeSummary}}
+                    </div>
+                    {{/if}}
+                </article>
+                {{/each}}
+            </section>
+            {{/if}}
+
+            {{#each categories}}
+            <section class="section">
+                <h2 class="section-title">
+                    {{#if icon}}{{icon}}{{/if}} {{name}}
+                    <span style="font-weight: 400; font-size: 0.875rem; color: var(--color-secondary);">({{articles.length}})</span>
+                </h2>
+                {{#each articles}}
+                <article class="article">
+                    <h3 class="article-title">
+                        <a href="{{url}}" target="_blank" rel="noopener">{{title}}</a>
+                    </h3>
+                    <div class="article-meta">
+                        <span>{{source.name}}</span>
+                        <span>•</span>
+                        <span>{{timeAgo}}</span>
+                        {{#if readTime}}
+                        <span>•</span>
+                        <span>{{readTime}} min read</span>
+                        {{/if}}
+                    </div>
+                    {{#if excerpt}}
+                    <div class="article-excerpt">{{excerpt}}</div>
+                    {{/if}}
+                    {{#if claudeSummary}}
+                    <div class="claude-summary">
+                        <strong>Claude's take:</strong> {{claudeSummary}}
+                    </div>
+                    {{/if}}
+                </article>
+                {{/each}}
+            </section>
+            {{/each}}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-text">
+                Curated by Claude AI • {{totalArticles}} articles from {{totalSources}} sources<br>
+                Generated at {{generationTime}}
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function updateTheme(dark) {
+            document.documentElement.style.setProperty('--color-primary', dark ? '#ffffff' : '#1a1a1a');
+            document.documentElement.style.setProperty('--color-secondary', dark ? '#94a3b8' : '#666666');
+            document.documentElement.style.setProperty('--color-accent', dark ? '#60a5fa' : '#2563eb');
+            document.documentElement.style.setProperty('--color-background', dark ? '#0f172a' : '#ffffff');
+            document.documentElement.style.setProperty('--color-surface', dark ? '#1e293b' : '#f8fafc');
+            document.documentElement.style.setProperty('--color-border', dark ? '#334155' : '#e2e8f0');
+            
+            themeToggle.textContent = dark ? '☀️' : '🌙';
+        }
+        
+        // Initialize theme
+        updateTheme(prefersDark.matches);
+        
+        // Listen for system theme changes
+        prefersDark.addEventListener('change', (e) => updateTheme(e.matches));
+        
+        // Manual theme toggle
+        themeToggle.addEventListener('click', () => {
+            const isDark = getComputedStyle(document.documentElement).getPropertyValue('--color-background').trim() === '#0f172a';
+            updateTheme(!isDark);
+        });
+    </script>
+</body>
+</html>

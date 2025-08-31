@@ -1,0 +1,92 @@
+{
+  "rss_sources": [
+    {
+      "id": "reuters",
+      "name": "Reuters",
+      "url": "https://feeds.reuters.com/reuters/topNews",
+      "category": "general",
+      "priority": 9
+    },
+    {
+      "id": "bbc",
+      "name": "BBC News",
+      "url": "http://feeds.bbci.co.uk/news/rss.xml",
+      "category": "general",
+      "priority": 9
+    },
+    {
+      "id": "ap",
+      "name": "Associated Press",
+      "url": "https://apnews.com/rss",
+      "category": "general",
+      "priority": 9
+    },
+    {
+      "id": "npr",
+      "name": "NPR News",
+      "url": "https://feeds.npr.org/1001/rss.xml",
+      "category": "general",
+      "priority": 8
+    },
+    {
+      "id": "axios",
+      "name": "Axios",
+      "url": "https://api.axios.com/feed/",
+      "category": "general",
+      "priority": 8
+    }
+  ],
+  "tech_sources": [
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/feed/",
+      "category": "technology",
+      "priority": 8
+    },
+    {
+      "id": "ars-technica",
+      "name": "Ars Technica",
+      "url": "http://feeds.arstechnica.com/arstechnica/index",
+      "category": "technology",
+      "priority": 8
+    },
+    {
+      "id": "wired",
+      "name": "Wired",
+      "url": "https://www.wired.com/feed/rss",
+      "category": "technology",
+      "priority": 7
+    },
+    {
+      "id": "the-verge",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "category": "technology",
+      "priority": 8
+    }
+  ],
+  "business_sources": [
+    {
+      "id": "wsj",
+      "name": "Wall Street Journal",
+      "url": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+      "category": "business",
+      "priority": 8
+    },
+    {
+      "id": "bloomberg",
+      "name": "Bloomberg",
+      "url": "https://feeds.bloomberg.com/politics/news.rss",
+      "category": "business",
+      "priority": 8
+    },
+    {
+      "id": "financial-times",
+      "name": "Financial Times",
+      "url": "https://www.ft.com/rss",
+      "category": "business",
+      "priority": 7
+    }
+  ]
+}

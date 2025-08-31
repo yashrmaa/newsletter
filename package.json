@@ -1,0 +1,46 @@
+{
+  "name": "newsletter-agent",
+  "version": "1.0.0",
+  "description": "AI-powered daily newsletter generator",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "generate": "tsx src/index.ts",
+    "test": "node run-tests.js",
+    "test:unit": "node tests/unit/config.test.js && node tests/unit/aggregator.test.js && node tests/unit/curation.test.js",
+    "test:integration": "node tests/integration/full-pipeline.test.js",
+    "setup-secrets": "./scripts/setup-github-secrets.sh"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "@octokit/rest": "^20.1.1",
+    "axios": "^1.7.3",
+    "cheerio": "^1.0.0-rc.12",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.4.5",
+    "handlebars": "^4.7.8",
+    "node-cron": "^3.0.3",
+    "openai": "^4.104.0",
+    "rss-parser": "^3.13.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.3",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  },
+  "keywords": [
+    "newsletter",
+    "ai",
+    "automation",
+    "news",
+    "curation"
+  ],
+  "author": "Newsletter Agent",
+  "license": "MIT"
+}

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "test-article-1",
+    "title": "Revolutionary AI Breakthrough Changes Everything",
+    "url": "https://example.com/ai-breakthrough",
+    "excerpt": "Scientists have developed a new AI system that can understand and reason about complex problems in ways never before possible. This breakthrough could revolutionize how we approach artificial intelligence and machine learning.",
+    "content": "In a groundbreaking development, researchers at leading technology institutions have unveiled an AI system that demonstrates unprecedented reasoning capabilities...",
+    "author": "Dr. Jane Smith",
+    "publishedAt": "2024-08-30T10:00:00Z",
+    "source": {
+      "id": "tech-news",
+      "name": "Tech News Daily",
+      "url": "https://example.com"
+    },
+    "category": "technology",
+    "tags": ["ai", "breakthrough", "research", "technology"],
+    "readTime": 5
+  },
+  {
+    "id": "test-article-2", 
+    "title": "Global Markets Rally on Economic Optimism",
+    "url": "https://example.com/markets-rally",
+    "excerpt": "Stock markets around the world surged today as investors showed renewed confidence in economic growth prospects. The rally was driven by positive employment data and strong corporate earnings.",
+    "content": "Major stock indices climbed significantly in trading today as investors demonstrated growing optimism about the global economic outlook...",
+    "author": "Financial Reporter",
+    "publishedAt": "2024-08-30T08:30:00Z",
+    "source": {
+      "id": "business-wire",
+      "name": "Business Wire",
+      "url": "https://example.com"
+    },
+    "category": "business",
+    "tags": ["markets", "economy", "stocks", "rally"],
+    "readTime": 3
+  },
+  {
+    "id": "test-article-3",
+    "title": "Climate Scientists Discover New Carbon Capture Method",
+    "url": "https://example.com/carbon-capture",
+    "excerpt": "A team of climate researchers has developed an innovative method for capturing carbon dioxide directly from the atmosphere at unprecedented efficiency levels.",
+    "content": "Climate change researchers have announced a significant advancement in carbon capture technology that could help address global warming...",
+    "author": "Environmental Correspondent", 
+    "publishedAt": "2024-08-30T12:15:00Z",
+    "source": {
+      "id": "science-journal",
+      "name": "Science Journal",
+      "url": "https://example.com"
+    },
+    "category": "science",
+    "tags": ["climate", "carbon", "environment", "research"],
+    "readTime": 4
+  },
+  {
+    "id": "test-article-4",
+    "title": "New Space Mission Prepares for Mars Landing",
+    "url": "https://example.com/mars-mission",
+    "excerpt": "Space agencies announce the successful launch of an ambitious Mars exploration mission that will search for signs of ancient life on the red planet.",
+    "content": "A groundbreaking space mission has begun its journey to Mars, carrying the most advanced scientific instruments ever sent to another planet...",
+    "author": "Space Reporter",
+    "publishedAt": "2024-08-30T09:45:00Z",
+    "source": {
+      "id": "space-news",
+      "name": "Space News Network",
+      "url": "https://example.com"
+    },
+    "category": "science",
+    "tags": ["space", "mars", "exploration", "mission"],
+    "readTime": 6
+  },
+  {
+    "id": "test-article-5",
+    "title": "Breaking: Major Tech Company Announces Acquisition",
+    "url": "https://example.com/tech-acquisition",
+    "excerpt": "In a surprise move, a leading technology company has announced the acquisition of a promising startup for $2.5 billion, marking one of the largest deals of the year.",
+    "content": "The technology industry was shaken today by news of a major acquisition that promises to reshape the competitive landscape...",
+    "author": "Business Analyst",
+    "publishedAt": "2024-08-30T14:20:00Z",
+    "source": {
+      "id": "tech-business",
+      "name": "Tech Business Today",
+      "url": "https://example.com"
+    },
+    "category": "business",
+    "tags": ["acquisition", "startup", "technology", "business"],
+    "readTime": 4
+  }
+]
