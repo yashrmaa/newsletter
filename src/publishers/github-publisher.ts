@@ -216,7 +216,7 @@ export class GitHubPublisher {
         </div>
         
         <div class="meta">
-            <p>Automatically generated every morning at 7 AM<br>
+            <p>Automatically generated every morning at 6 AM<br>
             Powered by Claude AI • Published via GitHub Actions</p>
         </div>
     </div>

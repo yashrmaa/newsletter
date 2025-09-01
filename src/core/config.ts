@@ -80,7 +80,7 @@ export const newsletterConfig: NewsletterConfig = {
     key: process.env.NEWS_API_KEY || '',
   },
   newsletter: {
-    time: process.env.NEWSLETTER_TIME || '07:00',
+    time: process.env.NEWSLETTER_TIME || '06:00',
     timezone: process.env.TIMEZONE || 'America/Los_Angeles',
     maxArticles: parseInt(process.env.MAX_ARTICLES || '15'),
   },

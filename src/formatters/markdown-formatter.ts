@@ -109,7 +109,7 @@ We monitor 28+ high-quality sources including:
 *Curated by Yash with AI • Generated at ${data.generationTime}*
 
 **🤖 Built with**: TypeScript • GitHub Actions • AI Curation  
-**📅 Schedule**: Daily at 7 AM Pacific  
+**📅 Schedule**: Daily at 6 AM Pacific  
 **🌐 Archive**: [All Newsletters](./README.md)
 `;
   }

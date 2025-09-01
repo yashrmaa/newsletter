@@ -3,7 +3,7 @@ name: Generate Daily AI Newsletter
 on:
   # Run daily at 2 PM UTC (7 AM Pacific)
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '0 13 * * *'
   
   # Allow manual triggering
   workflow_dispatch:

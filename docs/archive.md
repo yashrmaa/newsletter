@@ -25,7 +25,7 @@ permalink: /archive.html
 
 - **📚 Total Newsletters**: 1
 - **🗓️ Archive Period**: 2025-08-31 to 2025-08-31
-- **📅 Schedule**: Daily at 7 AM Pacific
+- **📅 Schedule**: Daily at 6 AM Pacific
 - **🤖 Curation**: AI-powered content selection
 
 ---

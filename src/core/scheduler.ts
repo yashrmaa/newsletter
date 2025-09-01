@@ -313,7 +313,7 @@ ${newsletterFiles.length > 0 ? newsletterFiles.map(file => {
 
 - **📚 Total Newsletters**: ${newsletterFiles.length}
 - **🗓️ Archive Period**: ${newsletterFiles.length > 0 ? `${newsletterFiles[newsletterFiles.length - 1].replace('.md', '')} to ${newsletterFiles[0].replace('.md', '')}` : 'Starting soon'}
-- **📅 Schedule**: Daily at 7 AM Pacific
+- **📅 Schedule**: Daily at 6 AM Pacific
 - **🤖 Curation**: AI-powered content selection
 
 ---
@@ -455,7 +455,7 @@ We monitor 28+ high-quality sources including:
 
     <div class="info">
         <h3>🤖 About This Newsletter</h3>
-        <p>This newsletter is automatically generated daily at 7 AM Pacific, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.</p>
+        <p>This newsletter is automatically generated daily at 6 AM Pacific, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.</p>
         
         <p><strong>📚 Content Sources:</strong> We monitor 28+ high-quality sources including Andrej Karpathy, Lilian Weng, OpenAI, Anthropic, DeepMind, Hugging Face, and many more AI experts.</p>
         
@@ -465,7 +465,7 @@ We monitor 28+ high-quality sources including:
     <div class="info">
         <h3>⚙️ How It Works</h3>
         <ul>
-            <li><strong>Daily Generation:</strong> 7:00 AM Pacific Time</li>
+            <li><strong>Daily Generation:</strong> 6:00 AM Pacific Time</li>
             <li><strong>Content Sources:</strong> 28+ expert AI blogs and research sites</li>
             <li><strong>AI Curation:</strong> Smart selection with quality scoring</li>
             <li><strong>Format:</strong> Clean Markdown rendered by GitHub</li>

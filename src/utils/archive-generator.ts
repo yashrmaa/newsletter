@@ -367,7 +367,7 @@ export class ArchiveGenerator {
                 <p>Daily AI newsletter curated from expert tech blogs and research</p>
                 <div class="stats">
                     <span>📊 ${newsletters.length} newsletters published</span>
-                    <span>🕒 Generated daily at 7 AM Pacific</span>
+                    <span>🕒 Generated daily at 6 AM Pacific</span>
                     <span>🤖 AI-curated content</span>
                 </div>
             </div>
