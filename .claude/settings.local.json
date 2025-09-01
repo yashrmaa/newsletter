@@ -10,7 +10,8 @@
       "Bash(npm run generate:*)",
       "Bash(open ./output/newsletter.html)",
       "Bash(git add:*)",
-      "Bash(open:*)"
+      "Bash(open:*)",
+      "Bash(gem install:*)"
     ],
     "deny": [],
     "ask": []

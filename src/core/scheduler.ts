@@ -253,9 +253,9 @@ ${markdown}`;
     logger.info('📚 Generating archive index...');
     await this.generateMarkdownArchive();
     
-    // Generate index.html for GitHub Pages
-    logger.info('🌐 Generating index.html for GitHub Pages...');
-    await this.generateIndexHTML();
+    // Generate index.html for GitHub Pages - DISABLED: Using Jekyll instead
+    // logger.info('🌐 Generating index.html for GitHub Pages...');
+    // await this.generateIndexHTML();
   }
 
   private async generateMarkdownArchive(): Promise<void> {

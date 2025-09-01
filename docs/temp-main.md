@@ -1,3 +1,9 @@
+---
+layout: default
+title: Today's Newsletter
+permalink: /index.html
+---
+
 # ☕ Yash's Daily Brief
 
 > Daily AI newsletter curated from expert tech blogs and research
@@ -10,25 +16,25 @@
 
 ### 🌟 [AI companies have started saying safeguards are load-bearing](https://www.alignmentforum.org/posts/Bz2gPtqRJJDWyKxnX/ai-companies-have-started-saying-safeguards-are-load-bearing)
 
-**AI Alignment Forum** • August 27th, 2025 • 5 days ago • 13 min read
+**AI Alignment Forum** • August 27th, 2025 • 4 days ago • 13 min read
 
 Published on August 27, 2025 1:00 PM GMT There are two ways to show that an AI system is safe: show that it doesn't have dangerous capabilities, or show that it's safe even if it has dangerous capabil...
 
 ---
 
-### 🌟 [Import AI 426: Playable world models; circuit design AI; and ivory smuggling analysis](https://jack-clark.net/2025/08/25/import-ai-426-playable-world-models-circuit-design-ai-and-ivory-smuggling-analysis/)
+### 🌟 [Spinal Tap meets John Malkovich](https://garymarcus.substack.com/p/spinal-tap-meets-john-malkovich)
 
-**Import AI** • August 25th, 2025 • 7 days ago • 1 min read
+**Gary Marcus** • August 31st, 2025 • about 1 hour ago • 1 min read
 
-Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you’d like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
+What's so funny about the need for world models?
 
 ---
 
-### 🌟 [Attaching requirements to model releases has serious downsides (relative to a different deadline for these requirements)](https://www.alignmentforum.org/posts/Eh7WdKTrpLch5Kvkz/attaching-requirements-to-model-releases-has-serious)
+### 🌟 [Import AI 426: Playable world models; circuit design AI; and ivory smuggling analysis](https://jack-clark.net/2025/08/25/import-ai-426-playable-world-models-circuit-design-ai-and-ivory-smuggling-analysis/)
 
-**AI Alignment Forum** • August 27th, 2025 • 4 days ago • 8 min read
+**Import AI** • August 25th, 2025 • 6 days ago • 1 min read
 
-Published on August 27, 2025 5:04 PM GMT Here's a relatively important question regarding transparency requirements for AI companies: At which points in time should AI companies be required to disclos...
+Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you'd like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
 
 ---
 
@@ -38,13 +44,13 @@ Published on August 27, 2025 5:04 PM GMT Here's a relatively important question 
 
 ### [Spinal Tap meets John Malkovich](https://garymarcus.substack.com/p/spinal-tap-meets-john-malkovich)
 
-**Gary Marcus** • August 31st, 2025 • about 5 hours ago • 1 min read
+**Gary Marcus** • August 31st, 2025 • about 1 hour ago • 1 min read
 
-What’s so funny about the need for world models?
+What's so funny about the need for world models?
 
 ---
 
-### [What scaling does and doesn’t buy you: peeling back the hype surrounding Google‘s trendy Nano Banana](https://garymarcus.substack.com/p/what-scaling-does-and-doesnt-buy)
+### [What scaling does and doesn't buy you: peeling back the hype surrounding Google's trendy Nano Banana](https://garymarcus.substack.com/p/what-scaling-does-and-doesnt-buy)
 
 **Gary Marcus** • August 27th, 2025 • 4 days ago • 1 min read
 
@@ -62,7 +68,7 @@ Published on August 27, 2025 5:04 PM GMT Here's a relatively important question 
 
 ### [AI companies have started saying safeguards are load-bearing](https://www.alignmentforum.org/posts/Bz2gPtqRJJDWyKxnX/ai-companies-have-started-saying-safeguards-are-load-bearing)
 
-**AI Alignment Forum** • August 27th, 2025 • 5 days ago • 13 min read
+**AI Alignment Forum** • August 27th, 2025 • 4 days ago • 13 min read
 
 Published on August 27, 2025 1:00 PM GMT There are two ways to show that an AI system is safe: show that it doesn't have dangerous capabilities, or show that it's safe even if it has dangerous capabil...
 
@@ -72,7 +78,7 @@ Published on August 27, 2025 1:00 PM GMT There are two ways to show that an AI s
 
 **AI Alignment Forum** • August 26th, 2025 • 5 days ago • 25 min read
 
-Published on August 26, 2025 5:07 PM GMT Let’s start with the classic Maxwell’s Demon setup. We have a container of gas, i.e. a bunch of molecules bouncing around. Down the middle of the container is ...
+Published on August 26, 2025 5:07 PM GMT Let's start with the classic Maxwell's Demon setup. We have a container of gas, i.e. a bunch of molecules bouncing around. Down the middle of the container is ...
 
 ---
 
@@ -84,7 +90,7 @@ Transform images in amazing new ways with updated native image editing in the Ge
 
 ---
 
-### [Will Smith’s concert crowds are real, but AI is blurring the lines](https://simonwillison.net/2025/Aug/26/will-smiths-concert-crowds/#atom-everything)
+### [Will Smith's concert crowds are real, but AI is blurring the lines](https://simonwillison.net/2025/Aug/26/will-smiths-concert-crowds/#atom-everything)
 
 **Simon Willison** • August 25th, 2025 • 6 days ago • 1 min read
 
@@ -100,9 +106,9 @@ Published on August 26, 2025 12:18 AM GMT This is a linkpost for https://www.arx
 
 ### [Import AI 426: Playable world models; circuit design AI; and ivory smuggling analysis](https://jack-clark.net/2025/08/25/import-ai-426-playable-world-models-circuit-design-ai-and-ivory-smuggling-analysis/)
 
-**Import AI** • August 25th, 2025 • 7 days ago • 1 min read
+**Import AI** • August 25th, 2025 • 6 days ago • 1 min read
 
-Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you’d like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
+Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you'd like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
 
 ---
 
@@ -111,7 +117,7 @@ Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, 
 - **📚 Articles**: 9 curated articles
 - **📡 Sources**: 5 expert sources
 - **🤖 Curation**: AI-powered with quality scoring
-- **⏰ Generated**: 6:55 PM on Aug 31, 2025
+- **⏰ Generated**: 2:27 PM on Aug 31, 2025
 
 ---
 
@@ -130,8 +136,8 @@ We monitor 28+ high-quality sources including:
 
 ---
 
-*Curated by Yash with AI • Generated at 6:55 PM on Aug 31, 2025*
+*Curated by Yash with AI • Generated at 2:27 PM on Aug 31, 2025*
 
 **🤖 Built with**: TypeScript • GitHub Actions • AI Curation  
 **📅 Schedule**: Daily at 7 AM Pacific  
-**🌐 Archive**: [All Newsletters](./README.md)
+**🌐 Archive**: [All Newsletters](./archive.html)
