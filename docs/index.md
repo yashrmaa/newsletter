@@ -1,32 +1,123 @@
-# 📰 Yash's Daily Brief - Newsletter Archive
+---
+layout: default
+title: Today's Newsletter
+permalink: /index.html
+---
+
+# ☕ Yash's Daily Brief
 
 > Daily AI newsletter curated from expert tech blogs and research
 
-**Archive of all newsletters • Generated on Sunday, August 31, 2025**
+**Sunday, August 31st, 2025**
 
 ---
 
-## 📅 Recent Newsletters
+## 🔥 Today's Highlights
 
-### 🌟 [Sunday, August 31, 2025](./2025-09-01.html) ← Today
+### 🌟 [AI companies have started saying safeguards are load-bearing](https://www.alignmentforum.org/posts/Bz2gPtqRJJDWyKxnX/ai-companies-have-started-saying-safeguards-are-load-bearing)
 
-- **File**: `2025-09-01.md`
-- **Date**: Sunday, August 31, 2025 (Current)
+**AI Alignment Forum** • August 27th, 2025 • 5 days ago • 13 min read
 
-### [Saturday, August 30, 2025](./2025-08-31.html) 
-
-- **File**: `2025-08-31.md`
-- **Date**: Saturday, August 30, 2025
-
+Published on August 27, 2025 1:00 PM GMT There are two ways to show that an AI system is safe: show that it doesn't have dangerous capabilities, or show that it's safe even if it has dangerous capabil...
 
 ---
 
-## 📊 Archive Stats
+### 🌟 [Import AI 426: Playable world models; circuit design AI; and ivory smuggling analysis](https://jack-clark.net/2025/08/25/import-ai-426-playable-world-models-circuit-design-ai-and-ivory-smuggling-analysis/)
 
-- **📚 Total Newsletters**: 2
-- **🗓️ Archive Period**: 2025-08-31 to 2025-09-01
-- **📅 Schedule**: Daily at 7 AM Pacific
-- **🤖 Curation**: AI-powered content selection
+**Import AI** • August 25th, 2025 • 7 days ago • 1 min read
+
+Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you’d like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
+
+---
+
+### 🌟 [Attaching requirements to model releases has serious downsides (relative to a different deadline for these requirements)](https://www.alignmentforum.org/posts/Eh7WdKTrpLch5Kvkz/attaching-requirements-to-model-releases-has-serious)
+
+**AI Alignment Forum** • August 27th, 2025 • 4 days ago • 8 min read
+
+Published on August 27, 2025 5:04 PM GMT Here's a relatively important question regarding transparency requirements for AI companies: At which points in time should AI companies be required to disclos...
+
+---
+
+## 📰 All Articles
+
+## 📰 General
+
+### [Spinal Tap meets John Malkovich](https://garymarcus.substack.com/p/spinal-tap-meets-john-malkovich)
+
+**Gary Marcus** • August 31st, 2025 • about 7 hours ago • 1 min read
+
+What’s so funny about the need for world models?
+
+---
+
+### [What scaling does and doesn’t buy you: peeling back the hype surrounding Google‘s trendy Nano Banana](https://garymarcus.substack.com/p/what-scaling-does-and-doesnt-buy)
+
+**Gary Marcus** • August 27th, 2025 • 4 days ago • 1 min read
+
+Some things never change
+
+---
+
+### [Attaching requirements to model releases has serious downsides (relative to a different deadline for these requirements)](https://www.alignmentforum.org/posts/Eh7WdKTrpLch5Kvkz/attaching-requirements-to-model-releases-has-serious)
+
+**AI Alignment Forum** • August 27th, 2025 • 4 days ago • 8 min read
+
+Published on August 27, 2025 5:04 PM GMT Here's a relatively important question regarding transparency requirements for AI companies: At which points in time should AI companies be required to disclos...
+
+---
+
+### [AI companies have started saying safeguards are load-bearing](https://www.alignmentforum.org/posts/Bz2gPtqRJJDWyKxnX/ai-companies-have-started-saying-safeguards-are-load-bearing)
+
+**AI Alignment Forum** • August 27th, 2025 • 5 days ago • 13 min read
+
+Published on August 27, 2025 1:00 PM GMT There are two ways to show that an AI system is safe: show that it doesn't have dangerous capabilities, or show that it's safe even if it has dangerous capabil...
+
+---
+
+### [Do-Divergence: A Bound for Maxwell's Demon](https://www.alignmentforum.org/posts/DHSY697pRWYto6LsF/do-divergence-a-bound-for-maxwell-s-demon)
+
+**AI Alignment Forum** • August 26th, 2025 • 5 days ago • 25 min read
+
+Published on August 26, 2025 5:07 PM GMT Let’s start with the classic Maxwell’s Demon setup. We have a container of gas, i.e. a bunch of molecules bouncing around. Down the middle of the container is ...
+
+---
+
+### [Image editing in Gemini just got a major upgrade](https://deepmind.google/discover/blog/image-editing-in-gemini-just-got-a-major-upgrade/)
+
+**DeepMind Blog** • August 26th, 2025 • 6 days ago • 1 min read
+
+Transform images in amazing new ways with updated native image editing in the Gemini app.
+
+---
+
+### [Will Smith’s concert crowds are real, but AI is blurring the lines](https://simonwillison.net/2025/Aug/26/will-smiths-concert-crowds/#atom-everything)
+
+**Simon Willison** • August 25th, 2025 • 6 days ago • 1 min read
+
+---
+
+### [New Paper on Reflective Oracles & Grain of Truth Problem](https://www.alignmentforum.org/posts/PuGxDb27xhRPBPbiv/new-paper-on-reflective-oracles-and-grain-of-truth-problem)
+
+**AI Alignment Forum** • August 25th, 2025 • 6 days ago • 2 min read
+
+Published on August 26, 2025 12:18 AM GMT This is a linkpost for https://www.arxiv.org/pdf/2508.16245 The grain of truth problem asks how multiple agents having consistent mental models can reason and...
+
+---
+
+### [Import AI 426: Playable world models; circuit design AI; and ivory smuggling analysis](https://jack-clark.net/2025/08/25/import-ai-426-playable-world-models-circuit-design-ai-and-ivory-smuggling-analysis/)
+
+**Import AI** • August 25th, 2025 • 7 days ago • 1 min read
+
+Welcome to Import AI, a newsletter about AI research. Import AI runs on lattes, ramen, and feedback from readers. If you’d like to support this, please subscribe. Subscribe now Tackling ivory smugglin...
+
+---
+
+## 📊 Newsletter Stats
+
+- **📚 Articles**: 9 curated articles
+- **📡 Sources**: 5 expert sources
+- **🤖 Curation**: AI-powered with quality scoring
+- **⏰ Generated**: 8:13 PM on Aug 31, 2025
 
 ---
 
@@ -39,12 +130,14 @@ This newsletter is automatically generated daily, curating the best content from
 We monitor 28+ high-quality sources including:
 
 - **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison
-- **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI  
+- **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI
 - **🔧 Platforms**: Hugging Face, LangChain, Pinecone, Weights & Biases
 - **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog
 
 ---
 
-*🤖 Built with TypeScript • Automated with GitHub Actions • Curated by AI*
+*Curated by Yash with AI • Generated at 8:13 PM on Aug 31, 2025*
 
-**📧 Questions?** This newsletter is automatically generated. For technical issues, check the [repository](https://github.com/yashvardhan90/newsletter).
+**🤖 Built with**: TypeScript • GitHub Actions • AI Curation  
+**📅 Schedule**: Daily at 7 AM Pacific  
+**🌐 Archive**: [All Newsletters](./README.md)

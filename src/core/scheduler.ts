@@ -338,9 +338,9 @@ We monitor 28+ high-quality sources including:
 **📧 Questions?** This newsletter is automatically generated. For technical issues, check the [repository](https://github.com/yashvardhan90/newsletter).
 `;
 
-      // Save archive index
-      const indexPath = path.join(docsDir, 'index.md');
-      await fs.writeFile(indexPath, archiveMarkdown, 'utf8');
+      // Save archive index to archive.md (not index.md which should be the homepage)
+      const archivePath = path.join(docsDir, 'archive-generated.md');
+      await fs.writeFile(archivePath, archiveMarkdown, 'utf8');
       
       logger.info(`✅ Archive index generated with ${newsletterFiles.length} newsletters`);
       
