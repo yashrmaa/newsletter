@@ -17,6 +17,11 @@ export interface UserPreferences {
     max_articles_per_category: number;
     diversity_vs_focus: number;
   };
+  authors: {
+    [key: string]: {
+      score: number;
+    };
+  };
 }
 
 export interface CuratedArticle extends Article {
