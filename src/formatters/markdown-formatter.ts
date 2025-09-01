@@ -31,7 +31,17 @@ export class MarkdownFormatter {
 
       const today = new Date();
       const formattedDate = format(today, 'EEEE, MMMM do, yyyy');
-      const generationTime = format(today, 'h:mm a \'on\' MMM d, yyyy');
+      // Format time in Pacific timezone
+      const pacificTime = today.toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      const generationTime = `${pacificTime} Pacific`;
 
       // Group articles by category
       const groupedArticles = this.groupArticlesByCategory(articles);

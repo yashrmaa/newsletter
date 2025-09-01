@@ -129,7 +129,15 @@ export class HTMLFormatter {
       categories: categories,
       totalArticles: articles.length,
       totalSources: this.countUniqueSources(articles),
-      generationTime: format(new Date(), 'h:mm a \'on\' MMM d, yyyy'),
+      generationTime: `${new Date().toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })} Pacific`,
     };
 
     return data;
