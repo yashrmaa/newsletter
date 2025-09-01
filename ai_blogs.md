@@ -111,3 +111,32 @@ A curated list of non-hype, high-signal AI blogs, essays, and project write-ups.
 - [BentoML Blog](https://blog.bentoml.com/)
 - [Riley J. Shaw](https://www.rileyjshaw.com/)
 - [Becoming Human](https://becominghuman.ai/)
+
+## New Additions - Individuals: Practitioners, Researchers & Builders
+- [Horace He](https://horace.io/) - AI researcher with innovative takes on ML optimization and systems
+- [Nathan Lambert (Personal)](https://www.nathanlambert.com/) - RLHF researcher and AI policy analysis
+- [Sasha Rush](https://rush-nlp.com/) - Harvard NLP professor with excellent model commentary and tutorials  
+- [Connor Leahy](https://connorleahy.substack.com/) - EleutherAI co-founder, AI safety and capabilities discussions
+- [Jared Kaplan](https://jaredkaplan.substack.com/) - Anthropic researcher, scaling laws and theoretical ML
+- [Sarah Hooker](https://www.sarahhooker.me/blog/) - Cohere researcher, ML interpretability and fairness
+- [Zvi Mowshowitz](https://thezvi.substack.com/) - Rationalist AI analysis, policy, and strategic thinking
+- [Matthew Barnett](https://mattbarnett.substack.com/) - AI alignment researcher with technical deep-dives
+
+## New Additions - Labs, Companies & Institutes
+- [Anthropic Alignment Science](https://alignment.anthropic.com/) - Technical AI safety and alignment research
+- [Distill](https://distill.pub/) - Interactive machine learning research visualization
+- [Transformer Circuits Thread](https://transformer-circuits.pub/) - Anthropic's interpretability research initiative
+- [MIRI Blog](https://intelligence.org/blog/) - Machine Intelligence Research Institute
+- [Carnegie Mellon ML Blog](https://blog.ml.cmu.edu/) - Academic ML research and insights
+- [Stanford AI Lab Blog](https://ai.stanford.edu/blog/) - Technical research from Stanford's AI Lab
+- [AWS Machine Learning Blog](https://aws.amazon.com/blogs/machine-learning/) - Production ML and cutting-edge applications
+- [Vector Institute](https://vectorinstitute.ai/blog/) - Canadian AI research institute
+- [Ought](https://ought.org/updates) - AI safety research organization
+
+## New Additions - Independent Newsletters & Analysis
+- [Import AI Newsletter](https://www.importai.com/) - Jack Clark's weekly AI research digest
+- [Papers with Code Blog](https://paperswithcode.com/blog/) - Trending ML research and benchmarks
+- [Modal Blog](https://modal.com/blog/) - Serverless compute for ML, infrastructure insights
+
+## New Additions - Specialized Research Areas
+- [Redwood Research](https://www.redwoodresearch.org/) - AI safety research and interpretability (if not already listed)
