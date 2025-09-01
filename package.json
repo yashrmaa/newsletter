@@ -10,7 +10,8 @@
     "generate": "tsx src/index.ts",
     "test": "node run-tests.js",
     "test:unit": "npm run build && node tests/unit/config.test.js && node tests/unit/aggregator.test.js && node tests/unit/curation.test.js && node tests/unit/preferences.test.js && node tests/unit/feedback.test.js",
-    "test:integration": "node tests/integration/full-pipeline.test.js",
+    "test:integration": "node tests/integration/full-pipeline.test.js && npm run test:integration:feedback",
+    "test:integration:feedback": "npm run build && node tests/integration/feedback-loop.test.js",
     "setup-secrets": "./scripts/setup-github-secrets.sh"
   },
   "dependencies": {
