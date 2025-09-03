@@ -57,6 +57,16 @@ The newsletter will automatically:
 - 🚀 Deploy to GitHub Pages
 - 💾 Archive previous editions
 
+### 5. Feedback System Setup (Giscus)
+This project uses Giscus to collect feedback on articles. To set it up, you need to:
+
+1.  **Create a public repository** to store the discussions. This can be the same repository as the newsletter, or a separate one.
+2.  **Enable the "Discussions" feature** in the repository settings.
+3.  **Install the Giscus app** on the repository by visiting [giscus.app](https://giscus.app) and following the instructions.
+4.  **Create a new discussion category** named "Announcements".
+5.  **Get the repository ID and category ID**. You can get these from the Giscus configuration page.
+6.  **Update the Giscus script** in `templates/newsletter/base.hbs` with your repository and category details.
+
 ## 🛠️ How It Works
 
 ```mermaid
@@ -165,7 +175,7 @@ Set up Gmail app password and configure email secrets for daily private URL deli
 ## 📈 Roadmap
 
 - [x] **MVP**: Basic RSS + Claude curation + GitHub Pages
-- [ ] **Feedback System**: Click feedback to improve curation
+- [x] **Feedback System**: Click feedback to improve curation
 - [ ] **Email Delivery**: Daily email with private URL
 - [ ] **Enhanced Discovery**: Twitter, Reddit, Hacker News integration
 - [ ] **Analytics**: Reading patterns and engagement metrics

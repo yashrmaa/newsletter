@@ -69,5 +69,13 @@
     "preferred_categories_order": ["technology", "business", "science", "general"],
     "max_articles_per_category": 5,
     "diversity_vs_focus": 0.7
+  },
+  "authors": {
+    "Andrej Karpathy": {
+      "score": 0.8
+    },
+    "Gary Marcus": {
+      "score": 0.4
+    }
   }
 }

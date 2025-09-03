@@ -220,6 +220,11 @@ Focus on selections that will make the user think "I'm glad I read this" and "I 
       .map(([type, preference]) => `${type}: ${preference}`)
       .join(', ');
 
+    const authorPrefs = preferences.authors ? Object.entries(preferences.authors)
+      .filter(([_, prefs]) => prefs.score > 0.6)
+      .map(([author, prefs]) => `${author} (Score: ${prefs.score.toFixed(2)})`)
+      .join(', ') : 'Not specified';
+
     return `### Interest Areas:
 ${topicAnalysis}
 
@@ -228,6 +233,9 @@ ${readingPatterns}
 
 ### Content Type Preferences:
 ${contentPrefs}
+
+### Author Preferences:
+- Highly rated authors: ${authorPrefs}
 
 ### Length Preferences:
 - Short articles (${preferences.content_preferences.article_length.short}), Medium articles (${preferences.content_preferences.article_length.medium}), Long articles (${preferences.content_preferences.article_length.long})

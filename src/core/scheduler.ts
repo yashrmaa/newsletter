@@ -1,13 +1,17 @@
 import { ContentAggregator } from '../aggregators/content-aggregator.js';
 import { createProviderFromEnv } from '../ai-providers/provider-factory.js';
-import { AIProvider, UserPreferences } from '../ai-providers/ai-provider.js';
-import { HTMLFormatter, CuratedArticle } from '../formatters/html-formatter.js';
+import { AIProvider, UserPreferences, CuratedArticle } from '../ai-providers/ai-provider.js';
+import { HTMLFormatter } from '../formatters/html-formatter.js';
 import { MarkdownFormatter } from '../formatters/markdown-formatter.js';
 import { GitHubPublisher, PublishOptions } from '../publishers/github-publisher.js';
 import { ArchiveGenerator } from '../utils/archive-generator.js';
 import { logger } from './logger.js';
 import { newsletterConfig } from './config.js';
 import { Article } from '../utils/types.js';
+import { loadUserPreferences } from './preferences.js';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { GiscusFeedbackFetcher } from './feedback-giscus.js';
 
 export class NewsletterScheduler {
   private contentAggregator: ContentAggregator;
@@ -42,36 +46,26 @@ export class NewsletterScheduler {
 
       logger.info(`✅ Found ${rawArticles.length} articles from ${this.getUniqueSourceCount(rawArticles)} sources`);
 
-      // Step 2: Use AI to curate and select the best articles
-      logger.info(`🤖 ${this.aiProvider.name} is curating articles...`);
-      const userPreferences: UserPreferences = {
-        topics: {
-          'technology': {
-            interest_score: 0.9,
-            keywords: ['AI', 'software', 'programming', 'tech', 'development', 'innovation'],
-            subtopics: { 'artificial-intelligence': 0.95, 'software-development': 0.85, 'cybersecurity': 0.8 }
-          },
-          'business': {
-            interest_score: 0.8,
-            keywords: ['startup', 'finance', 'economy', 'market', 'investment', 'leadership'],
-            subtopics: { 'startups': 0.9, 'finance': 0.75, 'management': 0.7 }
-          },
-          'science': {
-            interest_score: 0.7,
-            keywords: ['research', 'study', 'discovery', 'breakthrough', 'innovation'],
-            subtopics: { 'research': 0.8, 'medical': 0.7, 'space': 0.6 }
-          }
-        },
-        content_preferences: {
-          article_length: { short: 0.3, medium: 0.5, long: 0.2 },
-          content_types: { 'analysis': 0.9, 'news': 0.8, 'tutorial': 0.7, 'opinion': 0.6 }
-        },
-        reading_patterns: {
-          preferred_categories_order: ['highlights', 'technology', 'business', 'science', 'general'],
-          max_articles_per_category: 4,
-          diversity_vs_focus: 0.7
+      // Step 2: Fetch feedback from previous newsletter
+      if (newsletterConfig.github.token && newsletterConfig.github.repo && newsletterConfig.github.username) {
+        const curatedArticlesPath = path.resolve('./data/curated-articles.json');
+        try {
+          const data = await fs.readFile(curatedArticlesPath, 'utf-8');
+          const previousArticles = JSON.parse(data) as CuratedArticle[];
+          const feedbackFetcher = new GiscusFeedbackFetcher(
+            newsletterConfig.github.token,
+            newsletterConfig.github.username,
+            this.extractRepoName(newsletterConfig.github.repo)
+          );
+          await feedbackFetcher.fetchAndProcessFeedback(previousArticles);
+        } catch (error) {
+          logger.warn('Could not fetch feedback from previous newsletter. This is expected on the first run.');
         }
-      };
+      }
+
+      // Step 3: Use AI to curate and select the best articles
+      logger.info(`🤖 ${this.aiProvider.name} is curating articles...`);
+      const userPreferences = await loadUserPreferences();
 
       const curationResult = await this.aiProvider.curate(
         rawArticles,
@@ -85,6 +79,11 @@ export class NewsletterScheduler {
         logger.warn('⚠️ No articles passed curation criteria');
         throw new Error('No articles met the quality threshold');
       }
+
+      // Save curated articles for feedback processing
+      const curatedArticlesPath = path.resolve('./data/curated-articles.json');
+      await fs.writeFile(curatedArticlesPath, JSON.stringify(curatedArticles, null, 2), 'utf-8');
+      logger.info(`Saved ${curatedArticles.length} curated articles to ${curatedArticlesPath}`);
 
       logger.info(`✅ ${this.aiProvider.name} selected ${curatedArticles.length} high-quality articles`);
       
