@@ -274,7 +274,13 @@ ${markdown}`;
       
       // Generate archive index
       const today = new Date();
-      const archiveMarkdown = `# 📰 Yash's Daily Brief - Newsletter Archive
+      const archiveMarkdown = `---
+layout: default
+title: Newsletter Archive
+permalink: /archive.html
+---
+
+# 📰 Yash's Daily Brief - Newsletter Archive
 
 > Daily AI newsletter curated from expert tech blogs and research
 
@@ -339,7 +345,7 @@ We monitor 28+ high-quality sources including:
 `;
 
       // Save archive index to archive.md (not index.md which should be the homepage)
-      const archivePath = path.join(docsDir, 'archive-generated.md');
+      const archivePath = path.join(docsDir, 'archive.md');
       await fs.writeFile(archivePath, archiveMarkdown, 'utf8');
       
       logger.info(`✅ Archive index generated with ${newsletterFiles.length} newsletters`);

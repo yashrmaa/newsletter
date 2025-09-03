@@ -14,17 +14,22 @@ permalink: /archive.html
 
 ## 📅 Recent Newsletters
 
-### 🌟 [Sunday, August 31, 2025](./2025-08-31.html) 
+### 🌟 [Monday, September 1, 2025](./2025-09-01.html) ← Today
+
+- **File**: `2025-09-01.md`
+- **Date**: Monday, September 1, 2025 (Current)
+
+### [Sunday, August 31, 2025](./2025-08-31.html) 
 
 - **File**: `2025-08-31.md`
-- **Date**: Sunday, August 31, 2025 (Latest)
+- **Date**: Sunday, August 31, 2025
 
 ---
 
 ## 📊 Archive Stats
 
-- **📚 Total Newsletters**: 1
-- **🗓️ Archive Period**: 2025-08-31 to 2025-08-31
+- **📚 Total Newsletters**: 2
+- **🗓️ Archive Period**: 2025-08-31 to 2025-09-01
 - **📅 Schedule**: Daily at 6 AM Pacific
 - **🤖 Curation**: AI-powered content selection
 
