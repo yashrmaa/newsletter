@@ -129,7 +129,6 @@ A curated list of non-hype, high-signal AI blogs, essays, and project write-ups.
 - [MIRI Blog](https://intelligence.org/blog/) - Machine Intelligence Research Institute
 - [Carnegie Mellon ML Blog](https://blog.ml.cmu.edu/) - Academic ML research and insights
 - [Stanford AI Lab Blog](https://ai.stanford.edu/blog/) - Technical research from Stanford's AI Lab
-- [AWS Machine Learning Blog](https://aws.amazon.com/blogs/machine-learning/) - Production ML and cutting-edge applications
 - [Vector Institute](https://vectorinstitute.ai/blog/) - Canadian AI research institute
 - [Ought](https://ought.org/updates) - AI safety research organization
 
