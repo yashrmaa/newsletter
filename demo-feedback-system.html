@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Feedback System Demo</title>
+    <style>
+        :root {
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --color-primary: #1a1a1a;
+            --color-secondary: #666666;
+            --color-accent: #2563eb;
+            --color-background: #ffffff;
+            --color-surface: #f8fafc;
+            --color-border: #e2e8f0;
+            --reading-width: min(65ch, 90vw);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--color-primary);
+            background: var(--color-background);
+        }
+        
+        .container {
+            max-width: var(--reading-width);
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 1rem;
+        }
+        
+        .demo-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .demo-header p {
+            opacity: 0.9;
+        }
+        
+        .feedback-stats {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--color-border);
+        }
+        
+        .feedback-stats h3 {
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.375rem;
+            border: 1px solid var(--color-border);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+        }
+        
+        .excluded-sources {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fee2e2;
+            border-radius: 0.375rem;
+            border: 1px solid #fecaca;
+        }
+        
+        .excluded-sources h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article {
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .personalization-tag {
+            display: inline-block;
+            background: var(--color-accent);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .personalization-tag.warning {
+            background: #ef4444;
+        }
+        
+        .personalization-tag.loved {
+            background: #22c55e;
+        }
+        
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+        
+        .article-title a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        
+        .article-title a:hover {
+            color: var(--color-accent);
+        }
+        
+        .article-meta {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .article-excerpt {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-container {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--color-surface);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-border);
+        }
+        
+        .feedback-prompt {
+            font-size: 0.875rem;
+            color: var(--color-secondary);
+        }
+        
+        .feedback-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .feedback-btn {
+            padding: 0.4rem 0.8rem;
+            background: none;
+            border: 1px solid var(--color-border);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            color: var(--color-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .feedback-btn:hover {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+        
+        .feedback-btn.liked {
+            background: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+        
+        .feedback-btn.disliked {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        .demo-explanation {
+            background: #eff6ff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--color-accent);
+            margin-top: 2rem;
+        }
+        
+        .demo-explanation h3 {
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+        
+        .demo-explanation ul {
+            padding-left: 1.5rem;
+        }
+        
+        .demo-explanation li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="demo-header">
+            <h1>📰 Newsletter Feedback System Demo</h1>
+            <p>Try clicking the thumbs up/down buttons below to see how user preferences influence content curation</p>
+        </div>
+
+        <div class="feedback-stats">
+            <h3>📊 Current Feedback Stats</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-likes">0</div>
+                    <div class="stat-label">Total Likes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-dislikes">0</div>
+                    <div class="stat-label">Total Dislikes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="excluded-count">0</div>
+                    <div class="stat-label">Excluded Sources</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="prioritized-count">0</div>
+                    <div class="stat-label">Prioritized Sources</div>
+                </div>
+            </div>
+            <div class="excluded-sources" id="excluded-sources" style="display: none;">
+                <h4>🚫 Excluded Sources (will not appear in future newsletters)</h4>
+                <div id="excluded-list"></div>
+            </div>
+        </div>
+
+        <!-- Sample Articles -->
+        <article class="article">
+            <div class="personalization-tag loved" id="tag-1" style="display: none;">⭐ From a source you love</div>
+            <h3 class="article-title">
+                <a href="#" target="_blank">OpenAI Announces GPT-5 with Revolutionary Reasoning Capabilities</a>
+            </h3>
+            <div class="article-meta">
+                <span>OpenAI Blog</span>
+                <span>•</span>
+                <span>September 2nd, 2025</span>
+                <span>•</span>
+                <span>2 hours ago</span>
+                <span>•</span>
+                <span>5 min read</span>
+            </div>
+            <div class="article-excerpt">
+                OpenAI today unveiled GPT-5, featuring breakthrough advances in logical reasoning, mathematical problem-solving, and code generation. The new model demonstrates human-level performance on complex reasoning tasks...
+            </div>
+            <div class="feedback-container">
+                <div class="feedback-prompt">Was this article helpful?</div>
+                <div class="feedback-actions">
+                    <button class="feedback-btn" onclick="recordFeedback('openai-gpt5', 'like', this, 'OpenAI Blog')" data-article-id="openai-gpt5">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn" onclick="recordFeedback('openai-gpt5', 'dislike', this, 'OpenAI Blog')" data-article-id="openai-gpt5">
+                        👎 Dislike
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="article">
+            <div class="personalization-tag warning" id="tag-2" style="display: none;">⚠️ From a source you've disliked before</div>
+            <h3 class="article-title">
+                <a href="#" target="_blank">Amazon's New AI Shopping Assistant Tracks Everything You Buy</a>
+            </h3>
+            <div class="article-meta">
+                <span>Amazon Blog</span>
+                <span>•</span>
+                <span>September 2nd, 2025</span>
+                <span>•</span>
+                <span>4 hours ago</span>
+                <span>•</span>
+                <span>3 min read</span>
+            </div>
+            <div class="article-excerpt">
+                Amazon launches a new AI-powered shopping assistant that analyzes your purchase history, browsing patterns, and personal data to provide "personalized" recommendations...
+            </div>
+            <div class="feedback-container">
+                <div class="feedback-prompt">Was this article helpful?</div>
+                <div class="feedback-actions">
+                    <button class="feedback-btn" onclick="recordFeedback('amazon-ai-shopping', 'like', this, 'Amazon Blog')" data-article-id="amazon-ai-shopping">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn" onclick="recordFeedback('amazon-ai-shopping', 'dislike', this, 'Amazon Blog')" data-article-id="amazon-ai-shopping">
+                        👎 Dislike
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="article">
+            <div class="personalization-tag" id="tag-3" style="display: none;">✨ Contains topics you enjoy</div>
+            <h3 class="article-title">
+                <a href="#" target="_blank">Anthropic's Claude 3.5 Achieves Breakthrough in AI Safety Research</a>
+            </h3>
+            <div class="article-meta">
+                <span>Anthropic Blog</span>
+                <span>•</span>
+                <span>September 2nd, 2025</span>
+                <span>•</span>
+                <span>6 hours ago</span>
+                <span>•</span>
+                <span>7 min read</span>
+            </div>
+            <div class="article-excerpt">
+                Anthropic researchers demonstrate new techniques for AI alignment and safety, showing how Claude 3.5 can better understand and follow human values while maintaining high performance...
+            </div>
+            <div class="feedback-container">
+                <div class="feedback-prompt">Was this article helpful?</div>
+                <div class="feedback-actions">
+                    <button class="feedback-btn" onclick="recordFeedback('anthropic-safety', 'like', this, 'Anthropic Blog')" data-article-id="anthropic-safety">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn" onclick="recordFeedback('anthropic-safety', 'dislike', this, 'Anthropic Blog')" data-article-id="anthropic-safety">
+                        👎 Dislike
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="article">
+            <h3 class="article-title">
+                <a href="#" target="_blank">TechCrunch: Meta Releases New VR Headset with AI Integration</a>
+            </h3>
+            <div class="article-meta">
+                <span>TechCrunch</span>
+                <span>•</span>
+                <span>September 2nd, 2025</span>
+                <span>•</span>
+                <span>8 hours ago</span>
+                <span>•</span>
+                <span>4 min read</span>
+            </div>
+            <div class="article-excerpt">
+                Meta unveils its latest VR headset featuring built-in AI assistants, spatial computing capabilities, and seamless integration with Meta's AI ecosystem...
+            </div>
+            <div class="feedback-container">
+                <div class="feedback-prompt">Was this article helpful?</div>
+                <div class="feedback-actions">
+                    <button class="feedback-btn" onclick="recordFeedback('meta-vr-ai', 'like', this, 'TechCrunch')" data-article-id="meta-vr-ai">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn" onclick="recordFeedback('meta-vr-ai', 'dislike', this, 'TechCrunch')" data-article-id="meta-vr-ai">
+                        👎 Dislike
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <div class="demo-explanation">
+            <h3>🎯 How the Feedback System Works</h3>
+            <ul>
+                <li><strong>Like/Dislike Articles:</strong> Click the thumbs up/down buttons to rate articles</li>
+                <li><strong>Source Scoring:</strong> Each source gets +1 for likes, -1 for dislikes</li>
+                <li><strong>Automatic Filtering:</strong> Sources with -3 or lower scores get excluded from future newsletters</li>
+                <li><strong>Prioritization:</strong> Sources with +3 or higher scores get prioritized</li>
+                <li><strong>Personalization:</strong> The system shows why articles were selected based on your preferences</li>
+                <li><strong>Try it:</strong> Dislike the Amazon article 3 times to see it get excluded!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Feedback System Demo
+        let feedbackData = {
+            articles: {},
+            sources: {},
+            stats: { totalLikes: 0, totalDislikes: 0 },
+            preferences: { excludedSources: [], prioritizedSources: [] }
+        };
+
+        function loadFeedback() {
+            const stored = localStorage.getItem('newsletter-feedback-demo');
+            if (stored) {
+                feedbackData = JSON.parse(stored);
+            }
+            updateUI();
+        }
+
+        function saveFeedback() {
+            localStorage.setItem('newsletter-feedback-demo', JSON.stringify(feedbackData));
+            updateUI();
+        }
+
+        function recordFeedback(articleId, rating, buttonElement, sourceName) {
+            console.log(`Recording ${rating} for article ${articleId} from ${sourceName}`);
+            
+            // Record article feedback
+            const previousRating = feedbackData.articles[articleId]?.rating;
+            feedbackData.articles[articleId] = {
+                rating: rating,
+                timestamp: new Date().toISOString(),
+                source: sourceName
+            };
+            
+            // Update source scoring
+            const sourceId = sourceName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            if (!feedbackData.sources[sourceId]) {
+                feedbackData.sources[sourceId] = 0;
+            }
+            
+            // Remove previous rating effect
+            if (previousRating) {
+                const previousChange = previousRating === 'like' ? -1 : 1;
+                feedbackData.sources[sourceId] += previousChange;
+                if (previousRating === 'like') {
+                    feedbackData.stats.totalLikes--;
+                } else {
+                    feedbackData.stats.totalDislikes--;
+                }
+            }
+            
+            // Apply new rating
+            const scoreChange = rating === 'like' ? 1 : -1;
+            feedbackData.sources[sourceId] += scoreChange;
+            
+            // Update stats
+            if (rating === 'like') {
+                feedbackData.stats.totalLikes++;
+            } else {
+                feedbackData.stats.totalDislikes++;
+            }
+            
+            // Update preferences
+            updateSourcePreferences(sourceId, sourceName);
+            
+            // Update button states
+            const container = buttonElement.parentElement;
+            const likeBtn = container.querySelector('[onclick*="like"]');
+            const dislikeBtn = container.querySelector('[onclick*="dislike"]');
+            
+            // Reset button states
+            likeBtn.classList.remove('liked', 'disliked');
+            dislikeBtn.classList.remove('liked', 'disliked');
+            
+            // Set active state
+            if (rating === 'like') {
+                likeBtn.classList.add('liked');
+            } else {
+                dislikeBtn.classList.add('disliked');
+            }
+            
+            // Update personalization tags
+            updatePersonalizationTags();
+            
+            saveFeedback();
+            
+            // Show result message
+            const score = feedbackData.sources[sourceId];
+            console.log(`${sourceName} now has score: ${score}`);
+            
+            if (score <= -3 && !feedbackData.preferences.excludedSources.includes(sourceId)) {
+                alert(`🚫 ${sourceName} has been excluded from future newsletters due to low rating (score: ${score})`);
+            } else if (score >= 3 && !feedbackData.preferences.prioritizedSources.includes(sourceId)) {
+                alert(`⭐ ${sourceName} has been prioritized in future newsletters due to high rating (score: ${score})`);
+            }
+        }
+
+        function updateSourcePreferences(sourceId, sourceName) {
+            const score = feedbackData.sources[sourceId];
+            
+            // Remove from both lists first
+            feedbackData.preferences.excludedSources = 
+                feedbackData.preferences.excludedSources.filter(s => s !== sourceId);
+            feedbackData.preferences.prioritizedSources = 
+                feedbackData.preferences.prioritizedSources.filter(s => s !== sourceId);
+            
+            // Add to appropriate list based on score
+            if (score <= -3) {
+                feedbackData.preferences.excludedSources.push(sourceId);
+                console.log(`🚫 Source "${sourceName}" excluded (score: ${score})`);
+            } else if (score >= 3) {
+                feedbackData.preferences.prioritizedSources.push(sourceId);
+                console.log(`⭐ Source "${sourceName}" prioritized (score: ${score})`);
+            }
+        }
+
+        function updateUI() {
+            // Update stats
+            document.getElementById('total-likes').textContent = feedbackData.stats.totalLikes;
+            document.getElementById('total-dislikes').textContent = feedbackData.stats.totalDislikes;
+            document.getElementById('excluded-count').textContent = feedbackData.preferences.excludedSources.length;
+            document.getElementById('prioritized-count').textContent = feedbackData.preferences.prioritizedSources.length;
+            
+            // Update excluded sources display
+            const excludedDiv = document.getElementById('excluded-sources');
+            const excludedList = document.getElementById('excluded-list');
+            
+            if (feedbackData.preferences.excludedSources.length > 0) {
+                excludedDiv.style.display = 'block';
+                excludedList.innerHTML = feedbackData.preferences.excludedSources
+                    .map(source => `<span style="background: #fee2e2; padding: 0.25rem 0.5rem; border-radius: 0.25rem; margin: 0.25rem; display: inline-block;">${source.replace(/-/g, ' ')}</span>`)
+                    .join('');
+            } else {
+                excludedDiv.style.display = 'none';
+            }
+            
+            // Restore button states
+            Object.entries(feedbackData.articles).forEach(([articleId, data]) => {
+                const buttons = document.querySelectorAll(`[data-article-id="${articleId}"]`);
+                if (buttons.length > 0) {
+                    const container = buttons[0].parentElement;
+                    const likeBtn = container.querySelector('[onclick*="like"]');
+                    const dislikeBtn = container.querySelector('[onclick*="dislike"]');
+                    
+                    likeBtn.classList.remove('liked', 'disliked');
+                    dislikeBtn.classList.remove('liked', 'disliked');
+                    
+                    if (data.rating === 'like') {
+                        likeBtn.classList.add('liked');
+                    } else if (data.rating === 'dislike') {
+                        dislikeBtn.classList.add('disliked');
+                    }
+                }
+            });
+        }
+
+        function updatePersonalizationTags() {
+            // Show/hide personalization tags based on current preferences
+            const openaiScore = feedbackData.sources['openai-blog'] || 0;
+            const amazonScore = feedbackData.sources['amazon-blog'] || 0;
+            const anthropicScore = feedbackData.sources['anthropic-blog'] || 0;
+            
+            // OpenAI tag
+            const tag1 = document.getElementById('tag-1');
+            if (openaiScore >= 3) {
+                tag1.style.display = 'block';
+                tag1.className = 'personalization-tag loved';
+                tag1.textContent = '⭐ From a source you love';
+            } else if (openaiScore >= 2) {
+                tag1.style.display = 'block';
+                tag1.className = 'personalization-tag';
+                tag1.textContent = '👍 From a source you frequently like';
+            } else {
+                tag1.style.display = 'none';
+            }
+            
+            // Amazon tag
+            const tag2 = document.getElementById('tag-2');
+            if (amazonScore <= -2) {
+                tag2.style.display = 'block';
+                tag2.className = 'personalization-tag warning';
+                tag2.textContent = '⚠️ From a source you\'ve disliked before';
+            } else {
+                tag2.style.display = 'none';
+            }
+            
+            // Anthropic tag
+            const tag3 = document.getElementById('tag-3');
+            if (anthropicScore >= 2) {
+                tag3.style.display = 'block';
+                tag3.className = 'personalization-tag';
+                tag3.textContent = '✨ From a source you enjoy';
+            } else {
+                tag3.style.display = 'none';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeedback();
+            updatePersonalizationTags();
+            
+            // Add reset button
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = '🔄 Reset Demo';
+            resetBtn.style.cssText = `
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                background: #ef4444;
+                color: white;
+                border: none;
+                border-radius: 0.375rem;
+                cursor: pointer;
+                font-size: 0.875rem;
+            `;
+            resetBtn.onclick = () => {
+                localStorage.removeItem('newsletter-feedback-demo');
+                location.reload();
+            };
+            document.body.appendChild(resetBtn);
+        });
+    </script>
+</body>
+</html>

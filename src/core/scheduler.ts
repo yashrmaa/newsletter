@@ -68,7 +68,7 @@ export class NewsletterScheduler {
         },
         reading_patterns: {
           preferred_categories_order: ['highlights', 'technology', 'business', 'science', 'general'],
-          max_articles_per_category: 4,
+          max_articles_per_category: 8,
           diversity_vs_focus: 0.7
         }
       };
@@ -205,7 +205,7 @@ export class NewsletterScheduler {
   private async saveNewsletterLocally(markdown: string): Promise<void> {
     const fs = await import('fs/promises');
     const path = await import('path');
-    
+
     // Create docs directory for GitHub Pages
     const docsDir = './docs';
     try {
@@ -213,12 +213,86 @@ export class NewsletterScheduler {
     } catch (error) {
       // Directory might already exist
     }
-    
-    // Save newsletter as README.md (main page for GitHub)
+
+    const date = new Date();
+    const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const displayDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    // STEP 1: Archive existing README.md and index.md if they exist and are from a different day
+    const readmePath = path.join(docsDir, 'README.md');
+    const indexMdPath = path.join(docsDir, 'index.md');
+
+    try {
+      // Check if README.md exists
+      const readmeExists = await fs.access(readmePath).then(() => true).catch(() => false);
+
+      if (readmeExists) {
+        // Read the existing README to check if it's from today
+        const existingContent = await fs.readFile(readmePath, 'utf8');
+
+        // Extract the date from the existing content (look for the date line)
+        const dateMatch = existingContent.match(/\*\*([^*]+)\*\*/);
+
+        // If it's not today's date, archive it
+        if (dateMatch && !existingContent.includes(displayDate)) {
+          logger.info('📦 Archiving previous newsletter before generating new one...');
+
+          // Try to extract the date from existing content to create proper archive filename
+          // Look for YYYY-MM-DD pattern in the existing content
+          const oldDateMatch = existingContent.match(/(\d{4}-\d{2}-\d{2})/);
+          let archiveTimestamp = timestamp;
+
+          if (oldDateMatch) {
+            archiveTimestamp = oldDateMatch[1];
+          } else {
+            // Fallback: use yesterday's date
+            const yesterday = new Date(date);
+            yesterday.setDate(yesterday.getDate() - 1);
+            archiveTimestamp = yesterday.toISOString().split('T')[0];
+          }
+
+          // Create archived version with Jekyll front matter
+          const archiveDisplayDate = new Date(archiveTimestamp).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+
+          const archivedMarkdown = `---
+layout: default
+title: "Daily Brief - ${archiveDisplayDate}"
+date: ${archiveTimestamp}
+permalink: /${archiveTimestamp}.html
+---
+
+${existingContent}`;
+
+          const archivedPath = path.join(docsDir, `${archiveTimestamp}.md`);
+
+          // Only archive if the file doesn't already exist
+          const archiveExists = await fs.access(archivedPath).then(() => true).catch(() => false);
+          if (!archiveExists) {
+            await fs.writeFile(archivedPath, archivedMarkdown, 'utf8');
+            logger.info(`✅ Previous newsletter archived to ${archiveTimestamp}.md`);
+          } else {
+            logger.info(`ℹ️  Archive file ${archiveTimestamp}.md already exists, skipping`);
+          }
+        }
+      }
+    } catch (error: any) {
+      logger.warn('⚠️  Could not archive existing newsletter:', error.message);
+      // Continue with generation even if archiving fails
+    }
+
+    // STEP 2: Save newsletter as README.md (main page for GitHub)
     const filePath = path.join(docsDir, 'README.md');
     await fs.writeFile(filePath, markdown, 'utf8');
-    
-    // Also save as index.md with Jekyll front matter for proper rendering
+
+    // STEP 3: Also save as index.md with Jekyll front matter for proper rendering
     const indexMarkdown = `---
 layout: default
 title: Today's Newsletter
@@ -226,17 +300,9 @@ permalink: /index.html
 ---
 
 ${markdown}`;
-    await fs.writeFile(path.join(docsDir, 'index.md'), indexMarkdown, 'utf8');
-    
-    // Also save with timestamp for archive with Jekyll front matter
-    const date = new Date();
-    const timestamp = date.toISOString().split('T')[0]; // YYYY-MM-DD
-    const displayDate = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long', 
-      day: 'numeric'
-    });
-    
+    await fs.writeFile(indexMdPath, indexMarkdown, 'utf8');
+
+    // STEP 4: Also save with timestamp for archive with Jekyll front matter
     const timestampedMarkdown = `---
 layout: default
 title: "Daily Brief - ${displayDate}"
@@ -245,14 +311,16 @@ permalink: /${timestamp}.html
 ---
 
 ${markdown}`;
-    
+
     const timestampedPath = path.join(docsDir, `${timestamp}.md`);
     await fs.writeFile(timestampedPath, timestampedMarkdown, 'utf8');
-    
-    // Generate updated archive index (as Markdown)
+
+    logger.info(`✅ Newsletter saved: README.md, index.md, and ${timestamp}.md`);
+
+    // STEP 5: Generate updated archive index (as Markdown)
     logger.info('📚 Generating archive index...');
     await this.generateMarkdownArchive();
-    
+
     // Generate index.html for GitHub Pages - DISABLED: Using Jekyll instead
     // logger.info('🌐 Generating index.html for GitHub Pages...');
     // await this.generateIndexHTML();
@@ -286,7 +354,7 @@ permalink: /archive.html
 
 **Archive of all newsletters • Generated on ${today.toLocaleDateString('en-US', {
   weekday: 'long',
-  year: 'numeric', 
+  year: 'numeric',
   month: 'long',
   day: 'numeric'
 })}**
@@ -300,18 +368,18 @@ ${newsletterFiles.length > 0 ? newsletterFiles.map(file => {
   const displayDate = new Date(date).toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
-    month: 'long', 
+    month: 'long',
     day: 'numeric'
   });
   const isToday = date === today.toISOString().split('T')[0];
-  
+
   const htmlFile = file.replace('.md', '.html');
   return `### ${isToday ? '🌟 ' : ''}[${displayDate}](./${htmlFile}) ${isToday ? '← Today' : ''}
 
 - **File**: \`${file}\`
 - **Date**: ${displayDate}${isToday ? ' (Current)' : ''}
 `;
-}).join('\n') : '📝 No newsletters yet. Check back daily for new AI insights!'}
+}).join('\n') : '📝 No newsletters yet. Check back daily for new insights!'}
 
 ---
 
@@ -320,26 +388,27 @@ ${newsletterFiles.length > 0 ? newsletterFiles.map(file => {
 - **📚 Total Newsletters**: ${newsletterFiles.length}
 - **🗓️ Archive Period**: ${newsletterFiles.length > 0 ? `${newsletterFiles[newsletterFiles.length - 1].replace('.md', '')} to ${newsletterFiles[0].replace('.md', '')}` : 'Starting soon'}
 - **📅 Schedule**: Daily at 6 AM Pacific
-- **🤖 Curation**: AI-powered content selection
+- **📡 Sources**: 100+ quality blogs and publications
 
 ---
 
 ## 🎯 About This Newsletter
 
-This newsletter is automatically generated daily, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.
+This newsletter is curated daily from the best AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.
 
 ### 📚 Content Sources
 
-We monitor 28+ high-quality sources including:
+We monitor 100+ high-quality sources including:
 
-- **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison
-- **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI  
+- **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison, Gwern
+- **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI
 - **🔧 Platforms**: Hugging Face, LangChain, Pinecone, Weights & Biases
-- **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog
+- **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog, LessWrong
+- **✍️ Substacks**: Zvi Mowshowitz, Connor Leahy, Jared Kaplan, Matthew Barnett
 
 ---
 
-*🤖 Built with TypeScript • Automated with GitHub Actions • Curated by AI*
+*🔧 Built with TypeScript • Automated with GitHub Actions • Curated Daily*
 
 **📧 Questions?** This newsletter is automatically generated. For technical issues, check the [repository](https://github.com/yashvardhan90/newsletter).
 `;
@@ -460,27 +529,27 @@ We monitor 28+ high-quality sources including:
     </div>
 
     <div class="info">
-        <h3>🤖 About This Newsletter</h3>
-        <p>This newsletter is automatically generated daily at 6 AM Pacific, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.</p>
-        
-        <p><strong>📚 Content Sources:</strong> We monitor 28+ high-quality sources including Andrej Karpathy, Lilian Weng, OpenAI, Anthropic, DeepMind, Hugging Face, and many more AI experts.</p>
-        
-        <p><strong>🤖 AI Curation:</strong> Intelligent content selection with quality scoring and trending detection ensures you get the most relevant and valuable insights.</p>
+        <h3>📰 About This Newsletter</h3>
+        <p>This newsletter is curated daily at 6 AM Pacific from the best AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.</p>
+
+        <p><strong>📚 Content Sources:</strong> We monitor 100+ high-quality sources including Andrej Karpathy, Lilian Weng, OpenAI, Anthropic, DeepMind, Hugging Face, LessWrong, and many more experts.</p>
+
+        <p><strong>🔍 Smart Curation:</strong> Intelligent content selection with quality scoring ensures you get the most relevant and valuable insights.</p>
     </div>
 
     <div class="info">
         <h3>⚙️ How It Works</h3>
         <ul>
             <li><strong>Daily Generation:</strong> 6:00 AM Pacific Time</li>
-            <li><strong>Content Sources:</strong> 28+ expert AI blogs and research sites</li>
-            <li><strong>AI Curation:</strong> Smart selection with quality scoring</li>
+            <li><strong>Content Sources:</strong> 100+ expert blogs, research sites, and Substacks</li>
+            <li><strong>Smart Selection:</strong> Quality scoring and relevance filtering</li>
             <li><strong>Format:</strong> Clean Markdown rendered by GitHub</li>
             <li><strong>Archive:</strong> All previous newsletters saved and indexed</li>
         </ul>
     </div>
 
     <div class="footer">
-        <p>🤖 Built with TypeScript • Automated with GitHub Actions • Deployed on GitHub Pages</p>
+        <p>🔧 Built with TypeScript • Automated with GitHub Actions • Deployed on GitHub Pages</p>
         <p>Generated automatically • No manual intervention required</p>
     </div>
 

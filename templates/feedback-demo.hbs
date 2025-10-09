@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☕ Yash's Daily Brief</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #f7fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a202c;
+            border-bottom: 3px solid #4299e1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .article {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            transition: all 0.2s;
+        }
+
+        .article:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #4299e1;
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2d3748;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .article-title:hover {
+            color: #4299e1;
+        }
+
+        .article-meta {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .article-excerpt {
+            color: #4a5568;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .personalization-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* FEEDBACK SYSTEM */
+        .feedback-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 15px;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #4a5568;
+        }
+
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .feedback-btn.like {
+            border-color: #48bb78;
+            color: #22543d;
+        }
+
+        .feedback-btn.like:hover,
+        .feedback-btn.like.active {
+            background: #48bb78;
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .feedback-btn.dislike {
+            border-color: #f56565;
+            color: #742a2a;
+        }
+
+        .feedback-btn.dislike:hover,
+        .feedback-btn.dislike.active {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+        }
+
+        .feedback-result {
+            font-size: 0.8rem;
+            color: #4299e1;
+            font-style: italic;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .feedback-summary {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☕ Yash's Daily Brief</h1>
+        <p><em>Daily AI newsletter curated from expert tech blogs and research</em></p>
+        <p><strong>{{formattedDate}}</strong></p>
+
+        <div class="feedback-summary">
+            <strong>📊 Your Feedback Stats:</strong> 
+            <span id="stats-display">Loading...</span>
+            <br>
+            <span id="excluded-sources"></span>
+        </div>
+
+        <h2>🔥 Today's Highlights</h2>
+
+        {{#each highlights}}
+        <div class="article" data-article-id="{{id}}">
+            {{#if personalizationMessage}}
+            <div class="personalization-tag">{{personalizationMessage}}</div>
+            {{/if}}
+
+            <a href="{{url}}" class="article-title" target="_blank">{{title}}</a>
+            
+            <div class="article-meta">
+                <strong>{{source.name}}</strong> • {{timeAgo}} • {{readTime}} min read
+            </div>
+
+            <div class="article-excerpt">{{excerpt}}</div>
+
+            <div class="feedback-section">
+                <div class="feedback-buttons">
+                    <button class="feedback-btn like" onclick="giveFeedback('{{id}}', 'like', this)">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn dislike" onclick="giveFeedback('{{id}}', 'dislike', this)">
+                        👎 Dislike
+                    </button>
+                </div>
+                <div class="feedback-result" id="result-{{id}}"></div>
+            </div>
+        </div>
+        {{/each}}
+
+        <h2>📰 All Articles</h2>
+
+        {{#each categories}}
+        <h3>{{icon}} {{name}}</h3>
+        {{#each articles}}
+        <div class="article" data-article-id="{{id}}">
+            {{#if personalizationMessage}}
+            <div class="personalization-tag">{{personalizationMessage}}</div>
+            {{/if}}
+
+            <a href="{{url}}" class="article-title" target="_blank">{{title}}</a>
+            
+            <div class="article-meta">
+                <strong>{{source.name}}</strong> • {{timeAgo}} • {{readTime}} min read
+            </div>
+
+            <div class="article-excerpt">{{excerpt}}</div>
+
+            <div class="feedback-section">
+                <div class="feedback-buttons">
+                    <button class="feedback-btn like" onclick="giveFeedback('{{id}}', 'like', this)">
+                        👍 Like
+                    </button>
+                    <button class="feedback-btn dislike" onclick="giveFeedback('{{id}}', 'dislike', this)">
+                        👎 Dislike
+                    </button>
+                </div>
+                <div class="feedback-result" id="result-{{id}}"></div>
+            </div>
+        </div>
+        {{/each}}
+        {{/each}}
+
+        <div class="stats-section">
+            <h3>🎯 How Your Feedback Works</h3>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>👍 Like:</strong> Shows more articles from this source and similar topics</li>
+                <li><strong>👎 Dislike:</strong> Reduces articles from this source</li>
+                <li><strong>After 3 dislikes:</strong> Source is completely filtered out</li>
+                <li><strong>After 3 likes:</strong> Source gets priority placement</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Local storage for feedback
+        let feedbackData = JSON.parse(localStorage.getItem('newsletter-feedback') || '{"articles": {}, "sources": {}, "stats": {"likes": 0, "dislikes": 0}}');
+
+        function giveFeedback(articleId, rating, buttonElement) {
+            // Update UI immediately
+            const article = buttonElement.closest('.article');
+            const resultDiv = document.getElementById(`result-${articleId}`);
+            const buttons = article.querySelectorAll('.feedback-btn');
+            
+            // Remove previous active states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active state to clicked button
+            buttonElement.classList.add('active');
+            
+            // Get article info
+            const titleElement = article.querySelector('.article-title');
+            const metaElement = article.querySelector('.article-meta strong');
+            const source = metaElement ? metaElement.textContent : 'Unknown';
+            
+            // Store feedback
+            feedbackData.articles[articleId] = {
+                rating: rating,
+                source: source,
+                timestamp: new Date().toISOString(),
+                title: titleElement.textContent
+            };
+            
+            // Update source scores
+            if (!feedbackData.sources[source]) {
+                feedbackData.sources[source] = 0;
+            }
+            feedbackData.sources[source] += rating === 'like' ? 1 : -1;
+            
+            // Update stats
+            feedbackData.stats[rating === 'like' ? 'likes' : 'dislikes']++;
+            
+            // Save to localStorage
+            localStorage.setItem('newsletter-feedback', JSON.stringify(feedbackData));
+            
+            // Show result
+            const emoji = rating === 'like' ? '✅' : '❌';
+            resultDiv.innerHTML = `${emoji} Feedback recorded! This will influence future newsletters.`;
+            
+            // If source gets too many dislikes, show warning
+            if (feedbackData.sources[source] <= -3) {
+                resultDiv.innerHTML += `<br><strong>🚫 "${source}" will be filtered from future newsletters.</strong>`;
+            }
+            
+            updateStatsDisplay();
+            
+            console.log('Feedback recorded:', {
+                articleId,
+                rating,
+                source,
+                currentSourceScore: feedbackData.sources[source]
+            });
+        }
+
+        function updateStatsDisplay() {
+            const statsEl = document.getElementById('stats-display');
+            const excludedEl = document.getElementById('excluded-sources');
+            
+            const likes = feedbackData.stats.likes || 0;
+            const dislikes = feedbackData.stats.dislikes || 0;
+            
+            statsEl.innerHTML = `${likes} likes, ${dislikes} dislikes`;
+            
+            // Show excluded sources
+            const excludedSources = Object.entries(feedbackData.sources)
+                .filter(([source, score]) => score <= -3)
+                .map(([source]) => source);
+            
+            if (excludedSources.length > 0) {
+                excludedEl.innerHTML = `<strong>🚫 Filtered sources:</strong> ${excludedSources.join(', ')}`;
+            }
+        }
+
+        // Load existing feedback on page load
+        window.onload = function() {
+            updateStatsDisplay();
+            
+            // Restore previous feedback states
+            Object.entries(feedbackData.articles).forEach(([articleId, data]) => {
+                const article = document.querySelector(`[data-article-id="${articleId}"]`);
+                if (article) {
+                    const button = article.querySelector(`.feedback-btn.${data.rating}`);
+                    if (button) {
+                        button.classList.add('active');
+                        const resultDiv = document.getElementById(`result-${articleId}`);
+                        if (resultDiv) {
+                            const emoji = data.rating === 'like' ? '✅' : '❌';
+                            resultDiv.innerHTML = `${emoji} Previously rated`;
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

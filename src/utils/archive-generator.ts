@@ -364,11 +364,11 @@ export class ArchiveGenerator {
         <div class="container">
             <div class="header-content">
                 <h1>☕ Yash's Daily Brief</h1>
-                <p>Daily AI newsletter curated from expert tech blogs and research</p>
+                <p>Daily newsletter curated from expert tech blogs and research</p>
                 <div class="stats">
                     <span>📊 ${newsletters.length} newsletters published</span>
                     <span>🕒 Generated daily at 6 AM Pacific</span>
-                    <span>🤖 AI-curated content</span>
+                    <span>📚 100+ quality sources</span>
                 </div>
             </div>
         </div>
@@ -413,8 +413,8 @@ export class ArchiveGenerator {
     <footer class="footer">
         <div class="container">
             <p>
-                🤖 Automated with AI • Built with TypeScript • Deployed on GitHub Pages<br>
-                Generated at ${new Date().toLocaleString('en-US', { 
+                🔧 Automated Daily • Built with TypeScript • Deployed on GitHub Pages<br>
+                Generated at ${new Date().toLocaleString('en-US', {
                   timeZone: 'America/Los_Angeles',
                   weekday: 'long',
                   year: 'numeric',

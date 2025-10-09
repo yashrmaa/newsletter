@@ -96,30 +96,30 @@ ${data.categories.map((category: any) => this.formatCategoryMarkdown(category)).
 
 - **📚 Articles**: ${data.totalArticles} curated articles
 - **📡 Sources**: ${data.totalSources} expert sources
-- **🤖 Curation**: AI-powered with quality scoring
 - **⏰ Generated**: ${data.generationTime}
 
 ---
 
 ## 🎯 About This Newsletter
 
-This newsletter is automatically generated daily, curating the best content from AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.
+This newsletter is curated daily from the best AI researchers, company blogs, and tech thought leaders. No clickbait, no fluff - just high-signal insights from the AI community.
 
 ### 📚 Content Sources
 
-We monitor 28+ high-quality sources including:
+We monitor 100+ high-quality sources including:
 
-- **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison
+- **🧠 Researchers**: Andrej Karpathy, Lilian Weng, Chris Olah, Simon Willison, Gwern
 - **🏢 Companies**: OpenAI, Anthropic, DeepMind, Google AI, Meta AI
 - **🔧 Platforms**: Hugging Face, LangChain, Pinecone, Weights & Biases
-- **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog
+- **📝 Publications**: The Gradient, Distill, AI Alignment Forum, BAIR Blog, LessWrong
+- **✍️ Substacks**: Zvi Mowshowitz, Connor Leahy, Jared Kaplan, Matthew Barnett
 
 ---
 
-*Curated by Yash with AI • Generated at ${data.generationTime}*
+*Curated by Yash • Generated at ${data.generationTime}*
 
-**🤖 Built with**: TypeScript • GitHub Actions • AI Curation  
-**📅 Schedule**: Daily at 6 AM Pacific  
+**🔧 Built with**: TypeScript • GitHub Actions • Automated Daily
+**📅 Schedule**: Daily at 6 AM Pacific
 **🌐 Archive**: [All Newsletters](./archive.html)
 `;
   }
